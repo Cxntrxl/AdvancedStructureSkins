@@ -13,6 +13,7 @@ public static class InputHandler
     public static void Init()
     {
         MelonEvents.OnUpdate.Subscribe(Update);
+        ASS.LogVerbose("InputHandler Initialized");
     }
 
     public static void GetKeyDown(KeyCode key, Delegate action)

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using AdvancedStructureSkins.API;
-using AdvancedStructureSkins.Settings;
 using AdvancedStructureSkins.Util;
 using HarmonyLib;
 using Il2CppRUMBLE.MoveSystem;
@@ -63,15 +62,10 @@ public static class SkinHandler
 
     private static List<SkinTextures>[] _textures = new List<SkinTextures>[7];
 
-    private static AssetBundle oldStructures;
-
     public static void Init()
     {
         ReloadTexturesFromFile();
-        oldStructures = AssetBundles.LoadAssetBundleFromStream(ModInfo.ModName, ModInfo.ModAuthor,
-            "AdvancedStructureSkins.Resources.oldstructures");
-        
-        ASS.Log("Structure Shaders passed loading");
+        ASS.LogVerbose("SkinHandler Initialized");
     }
 
     public static void ReloadTexturesFromFile()
@@ -133,24 +127,27 @@ public static class SkinHandler
             return;
         }
         
-        if (!CustomShaders.IsInAnyCache("default_" + Types.Keys.ElementAt(type)))
+        /*if (!CustomShaders.IsInAnyCache("default_" + Types.Keys.ElementAt(type)))
         {
             Material clone = new Material(mr.material) { hideFlags = HideFlags.DontUnloadUnusedAsset };
             clone.SetTexture("Texture2D_8F187FEF", Texture2D.blackTexture);
             
             CustomShaders.AddToCache("default_" + Types.Keys.ElementAt(type), clone.shader, clone);
-        }
+        }*/
 
-        AssShader[] shaders = AssSettings.GetShadersFor(type);
+        AssShader[] shaders = AssAPI.GetShadersFor(type);
+        if (shaders.Length <= 0)
+            return;
+        
         AssShader shader = shaders[ASS.Random.Next(0, shaders.Length)];
 
         // ApplyMeshTo(advancedSkin, type);
-        ApplyTexturesTo(advancedSkin, type);
+        //ApplyTexturesTo(advancedSkin, type);
         ApplyShaderTo(advancedSkin, type, shader);
         ApplyOverridesTo(advancedSkin, type, shader);
     }
 
-    private static void ApplyMeshTo(AdvancedSkin advancedSkin, int type)
+    /*private static void ApplyMeshTo(AdvancedSkin advancedSkin, int type)
     {
         bool useLegacy = false;
         if (useLegacy && advancedSkin.meshSkin == null)
@@ -159,11 +156,11 @@ public static class SkinHandler
         }
 
         advancedSkin.meshSkin?.SetActive(useLegacy);
-    }
+    }*/
 
     private static void ApplyTexturesTo(AdvancedSkin advancedSkin, int type)
     {
-        Material defaultMat = CustomShaders.GetMaterial("default_" + Types.Keys.ElementAt(type));
+        //Material defaultMat = CustomShaders.GetMaterial("default_" + Types.Keys.ElementAt(type));
 
         foreach (MeshRenderer mr in advancedSkin.GetRenderers())
         {
@@ -175,7 +172,7 @@ public static class SkinHandler
             {
                 if (_textures[type].Count <= 0 || !_textures[type][textureIndex].HasTextureFor(i))
                 {
-                    ApplyDefaultTexturesTo(properties, defaultMat, i);
+                    //ApplyDefaultTexturesTo(properties, defaultMat, i);
                     continue;
                 }
             
@@ -208,9 +205,13 @@ public static class SkinHandler
     // ReSharper disable once UnusedParameter.Local
     private static void ApplyShaderTo(AdvancedSkin advancedSkin, int type, AssShader shader)
     {
-        Material newMat = shader.material;
-
-        if (newMat == null) return;
+        if (shader.material == null)
+        {
+            ASS.WarnVerbose("Could not find material on AssShader, gave up executing ApplyShaderTo()");
+            return;
+        }
+        
+        Material newMat = new Material(shader.material);
 
         foreach (MeshRenderer mr in advancedSkin.GetRenderers())
         {

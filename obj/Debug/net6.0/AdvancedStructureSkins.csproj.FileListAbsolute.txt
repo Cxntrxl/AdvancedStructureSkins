@@ -26,7 +26,6 @@ E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\Il2CppRUMBLE.
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\Il2CppSmartLocalization.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\Il2CppSystem.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\MelonLoader.dll
-E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\ModUI.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\UnityEngine.AssetBundleModule.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\UnityEngine.CoreModule.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\UnityEngine.dll
@@ -81,7 +80,6 @@ E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\MonoMod.Utils
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\MonoMod.RuntimeDetour.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\bHapticsLib.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\AssetRipper.Primitives.dll
-E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\Tomlet.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\AssetsTools.NET.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\AsmResolver.DotNet.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\AsmResolver.PE.dll
@@ -126,3 +124,5 @@ E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\Unity.Profili
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\Il2CppLIV.LCKCore.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\Il2CppLIV.LCKCore.ThirdParty.MessagePack.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\OptimizedGraphicsFix.dll
+E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\UIFramework.dll
+E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\bin\Debug\net6.0\UIFramework.xml

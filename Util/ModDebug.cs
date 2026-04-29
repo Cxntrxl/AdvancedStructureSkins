@@ -8,7 +8,11 @@ public class ModDebug
 {
     public static void AddInputs()
     {
-        InputHandler.GetKeyDown(new[] { KeyCode.LeftAlt, KeyCode.S }, CustomShaders.LogCache);
+        if (!ModInfo.ExperimentalBuild)
+            return;
+        
+        ASS.Log("ExperimentalBuild enabled. Adding debug binds");
+        
         InputHandler.GetKeyDown(KeyCode.F9, LogPropertyNames);
         InputHandler.GetKeyDown(KeyCode.F8, ScanForTextureReference);
         InputHandler.GetKeyDown(new[] { KeyCode.LeftAlt, KeyCode.N}, ReplaceProperties);
