@@ -1,0 +1,11 @@
+{
+    "name": "AdvancedStructureSkins",
+    "version_number": "1.3.3",
+    "website_url": "https://github.com/Cxntrxl/AdvancedStructureSkinsSDK",
+    "description": "Customize your structures like we've never seen before! Supports all HLSL and Shader Graph shaders.",
+    "dependencies": [
+        "UlvakSkillz-RumbleModdingAPI-5.0.1",
+	"Cxntrxl-OptimizedGraphicsFix-1.0.0",
+	"Baumritter-RumbleModUI-2.1.2"
+    ]
+}
