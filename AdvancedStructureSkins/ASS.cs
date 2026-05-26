@@ -69,6 +69,8 @@ public class ASS : MelonMod
         
         AssAPI.Init();
         UIHandler.Init();
+        
+        BulkPatcher.ApplyPatches(new HarmonyLib.Harmony("AdvancedStructureSkins.ASS"));
     }
     
     public override void OnLateInitializeMelon()

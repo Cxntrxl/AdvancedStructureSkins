@@ -89,7 +89,7 @@ public static class SkinHandler
 
         if (!shader.initialized)
         {
-            shader.material = new Material(mr.material) { hideFlags = HideFlags.DontUnloadUnusedAsset };
+            shader.shaders[0].material = new Material(mr.material) { hideFlags = HideFlags.DontUnloadUnusedAsset };
             shader.initialized = true;
         }
 
@@ -158,45 +158,76 @@ public static class SkinHandler
     // ReSharper disable once UnusedParameter.Local
     private static void ApplyShaderTo(AdvancedSkin advancedSkin, StructureFlags type, AssShader shader)
     {
-        if (shader.material == null)
+        if (shader.shaders == null)
         {
-            ASS.WarnVerbose("Could not find material on AssShader, gave up executing ApplyShaderTo()");
+            ASS.WarnVerbose("Could not find material list on AssShader, gave up executing ApplyShaderTo()");
             return;
         }
-        
-        Material newMat = new Material(shader.material);
-        
         MeshRenderer mr = advancedSkin.MeshRenderer;
-        newMat.CopyMatchingPropertiesFromMaterial(mr.material);
-        mr.material = newMat;
 
+        Material[] materials = GetMaterials(shader, mr);
+        if (materials.Length <= 0)
+        {
+            ASS.WarnVerbose("AssShader returned no materials. Gave up executing ApplyShaderTo()");
+            return;
+        }
+
+        mr.materials = materials;
+        
         advancedSkin.RefreshEnabledShaderFeatures();
         advancedSkin.currentShader = shader;
     }
 
+    private static Material[] GetMaterials(AssShader shader, MeshRenderer meshRenderer)
+    {
+        List<Material> materials = new List<Material>();
+
+        foreach (ShaderManifest manifest in shader.shaders)
+        {
+            Material newMat = new Material(manifest.material);
+            
+            newMat.CopyMatchingPropertiesFromMaterial(meshRenderer.materials[0]);
+            materials.Add(newMat);
+        }
+        
+        return materials.ToArray();
+    }
+
     private static void ApplyOverridesTo(AdvancedSkin advancedSkin, StructureFlags type, AssShader shader)
     {
-        List<MaterialPropertyOverride> overrides = shader.overrides;
-        if (overrides == null) return;
+        List<ShaderManifest> manifests = shader.shaders;
+        if (manifests == null) return;
 
         MeshRenderer mr = advancedSkin.MeshRenderer;
-        foreach (var propOver in overrides.Where(propOver => (propOver.targetStructures & type) != 0))
+
+        foreach (ShaderManifest manifest in manifests)
         {
-            switch (propOver.propertyType)
+            for (int i = 0; i < manifest.overrides.Count; i++)
             {
-                case ShaderPropertyType.Color:
-                    mr.material.SetColor(propOver.propertyName, propOver.colorValue);
-                    break;
-                case ShaderPropertyType.Vector:
-                    mr.material.SetVector(propOver.propertyName, propOver.vectorValue);
-                    break;
-                case ShaderPropertyType.Float:
-                case ShaderPropertyType.Range:
-                    mr.material.SetFloat(propOver.propertyName, propOver.floatValue);
-                    break;
-                case ShaderPropertyType.Int:
-                    mr.material.SetInt(propOver.propertyName, propOver.intValue);
-                    break;
+                if (manifest.overrides[i] == null) continue;
+                if ((manifest.overrides[i].targetStructures & type) == 0) continue;
+                if (mr.materials.Count < i) continue;
+                if (mr.materials[i] == null) continue;
+                
+                switch (manifest.overrides[i].propertyType)
+                {
+                    case ShaderPropertyType.Color:
+                        mr.materials[i].SetColor(manifest.overrides[i].propertyName, manifest.overrides[i].colorValue);
+                        break;
+                    case ShaderPropertyType.Vector:
+                        mr.materials[i].SetVector(manifest.overrides[i].propertyName, manifest.overrides[i].vectorValue);
+                        break;
+                    case ShaderPropertyType.Float:
+                    case ShaderPropertyType.Range:
+                        mr.materials[i].SetFloat(manifest.overrides[i].propertyName, manifest.overrides[i].floatValue);
+                        break;
+                    case ShaderPropertyType.Texture:
+                        mr.materials[i].SetTexture(manifest.overrides[i].propertyName, manifest.overrides[i].textureValue);
+                        break;
+                    case ShaderPropertyType.Int:
+                        mr.materials[i].SetInt(manifest.overrides[i].propertyName, manifest.overrides[i].intValue);
+                        break;
+                }
             }
         }
     }

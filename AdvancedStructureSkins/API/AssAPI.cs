@@ -92,11 +92,19 @@ public static class AssAPI
                     continue;
                 }
 
-                SkinManifestBinary referenceManifest = BinaryHandler.Read(binary.bytes);
-                SkinManifest manifest = referenceManifest.GetSkinManifestFromBundle(bundle);
-                
-                Shaders.Add(LoadShaderFromManifest(manifest));
-                TextureSets.AddRange(LoadTextureSetsFromManifest(manifest));
+                try
+                {
+                    SkinManifestBinary referenceManifest = BinaryHandler.Read(binary.bytes);
+                    SkinManifest manifest = referenceManifest.GetSkinManifestFromBundle(bundle);
+
+                    Shaders.Add(LoadShaderFromManifest(manifest));
+                    TextureSets.AddRange(LoadTextureSetsFromManifest(manifest));
+                }
+                catch (Exception ex)
+                {
+                    ASS.Error($"Failed to load {Path.GetFileName(fullPath)}: {ex.Message}");
+                    loadedBundles--;
+                }
             }
 
             loadedBundles++;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -7,40 +8,32 @@ namespace AdvancedStructureSkins.Shared.SDK.Binary
     [Serializable]
     public class SkinManifestBinary
     {
-        public int version = 1;
         public string skinName;
-        public string materialName;
         public string previewTextureName;
         public bool allowedInComp;
-        public MaterialOverrideBinary[] overrides;
+        public ShaderManifestBinary[] shaders;
         public TextureSetBinary[] textures;
 
         public SkinManifest GetSkinManifestFromBundle(AssetBundle bundle)
         {
             SkinManifest manifest = ScriptableObject.CreateInstance<SkinManifest>();
             manifest.skinName = skinName;
-            manifest.material = GetMaterialFromBundle(bundle);
             manifest.previewTexture = GetTextureFromBundle(bundle);
             manifest.allowedInComp = allowedInComp;
-            manifest.overrides = overrides.Select(o => o.GetOverrideFromBundle(bundle)).ToList();
+            manifest.shaders = GetShaderManifestListFromBundle(bundle);
             manifest.textures = textures.Select(t => t.GetManifestFromBundle(bundle)).ToList();
             manifest.textures.ForEach(t => { if (t.previewTexture == null) t.previewTexture = manifest.previewTexture; });
             
             return manifest;
         }
 
-        public Material GetMaterialFromBundle(AssetBundle bundle)
+        public List<ShaderManifest> GetShaderManifestListFromBundle(AssetBundle bundle)
         {
-            foreach (var name in bundle.GetAllAssetNames())
-            {
-                if (name.EndsWith(materialName + ".mat", StringComparison.OrdinalIgnoreCase) ||
-                    name.EndsWith(materialName, StringComparison.OrdinalIgnoreCase))
-                {
-                    return bundle.LoadAsset<Material>(name);
-                }
-            }
+            List<ShaderManifest> result = new List<ShaderManifest>();
 
-            return null;
+            foreach (ShaderManifestBinary manifest in shaders) result.Add(manifest.GetShaderManifestFromBundle(bundle));
+            
+            return result;
         }
         
         public Texture GetTextureFromBundle(AssetBundle bundle)
@@ -57,6 +50,18 @@ namespace AdvancedStructureSkins.Shared.SDK.Binary
             
             tex.hideFlags = HideFlags.HideAndDontSave;
             return tex;
+        }
+    }
+
+    [Serializable]
+    public class MaterialOverrideBinaryArray
+    {
+        public MaterialOverrideBinary[] overrides;
+
+        public MaterialPropertyOverrideManifest GetOverrideManifestFromBundle(AssetBundle bundle)
+        {
+            return new MaterialPropertyOverrideManifest()
+                { overrides = overrides.Select(ob => ob.GetOverrideFromBundle(bundle)).ToList() };
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AdvancedStructureSkins.ShaderFeatures;
 using HarmonyLib;
 using Il2CppRUMBLE.MoveSystem;
+using UnityEngine.Rendering;
 
 namespace AdvancedStructureSkins.Skins;
 
@@ -9,7 +10,11 @@ public static class StructureSpawnPatch
 {
     private static void Postfix(ref Structure __instance)
     {
-        try { SkinHandler.ApplySkinTo(__instance); }
+        try
+        {
+            SkinHandler.ApplySkinTo(__instance); 
+            __instance.GetComponent<AdvancedSkin>().GetShaderFeature<IsExplodeApplied>().SetProperty(ShaderPropertyType.Float, 0f);
+        }
         catch (Exception ex) { ASS.Error(ex); }
     }
 }
@@ -26,26 +31,6 @@ public static class StructureStartPatch
             skin.Init();
         }
         catch (Exception ex) { ASS.Error(ex); }
-    }
-}
-
-[HarmonyPatch(typeof(PlayerStackProcessor), "Execute")]
-public static class PlayerStackProcessorExecutePatch
-{
-    private static void Postfix(Stack stack, StackConfiguration overrideConfig, ref PlayerStackProcessor __instance)
-    {
-        try
-        {
-            ProcessableComponent comp = stack?.targetLinks[0]?.TargetObject
-                ?.GetTarget(__instance.Cast<IProcessor>(), new StackConfiguration())
-                .GetProcessorComponent<ProcessableComponent>();
-            if (comp == null) return;
-
-            comp.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceLastModified>().ResetTimer();
-
-            foreach (AdvancedSkin skin in UnityEngine.Object.FindObjectsOfType<AdvancedSkin>().Where(skin => skin.shaderFeatures[typeof(TimeSinceLastPose)].enabled))
-                skin.GetShaderFeature<TimeSinceLastPose>().ResetTimer();
-        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
     }
 }
 
@@ -80,6 +65,24 @@ public static class StructureShakePatch
         try
         {
             __instance.gameObject.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceHitstop>().ResetTimer();
+        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+    }
+}
+
+[HarmonyPatch(typeof(ExplodeModifier), nameof(ExplodeModifier.Execute))]
+public static class ExplodeModifierExecutePatch
+{
+    public static void Postfix(ExplodeModifier __instance, IProcessor processor, StackConfiguration config)
+    {
+        try
+        {
+            var comp = config.TargetProcessable.GetProcessorComponent<ProcessableComponent>();
+            if (comp == null) return;
+            
+            AdvancedSkin skin = comp.GetComponent<AdvancedSkin>();
+            
+            skin?.GetShaderFeature<IsExplodeApplied>().SetProperty(ShaderPropertyType.Float, 1f);
+            skin?.GetShaderFeature<TimeSinceExplodeApplied>().ResetTimer();
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
     }
 }

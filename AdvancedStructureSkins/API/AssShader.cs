@@ -9,9 +9,8 @@ namespace AdvancedStructureSkins.API;
 public class AssShader
 {
     public readonly string name;
-    public Material material;
     public Texture previewTexture;
-    public readonly List<MaterialPropertyOverride> overrides;
+    public List<ShaderManifest> shaders = new List<ShaderManifest>();
     public byte enabledForStructure;
     public bool initialized = false;
     public byte defaultShaderFor = 0;
@@ -21,10 +20,8 @@ public class AssShader
     {
         name = manifest.skinName;
         enabledForStructure = (byte)StructureFlags.None;
-        material = manifest.material;
-        material.hideFlags = HideFlags.DontUnloadUnusedAsset;
         previewTexture = manifest.previewTexture;
-        overrides = manifest.overrides;
+        shaders = manifest.shaders;
         allowedInComp = manifest.allowedInComp;
         initialized = true;
     }
@@ -33,7 +30,7 @@ public class AssShader
     {
         this.name = name;
         enabledForStructure = (byte)StructureFlags.None;
-        overrides = new List<MaterialPropertyOverride>();
+        shaders.Add(new ShaderManifest { overrides = new List<MaterialPropertyOverride>() });
         defaultShaderFor = defaultFor;
     }
     
@@ -46,21 +43,28 @@ public class AssShader
         
         this.name = name;
         enabledForStructure = (byte)StructureFlags.None;
-        material = bundle.LoadAsset<Material>("material");
-        material.hideFlags = HideFlags.DontUnloadUnusedAsset;
         
         var data = bundle.LoadAsset<TextAsset>("overrides");
-        overrides = ReadDataFile(data != null ? data.text : "").ToList();
-
+        shaders = new List<ShaderManifest>
+        {
+            new ShaderManifest
+            {
+                material = bundle.LoadAsset<Material>("material"),
+                overrides = ReadDataFile(data != null ? data.text : "").ToList()
+            }
+        };
+        
+        shaders[0].material.hideFlags = HideFlags.DontUnloadUnusedAsset;
+        
         initialized = true;
     }
     
-    private static MaterialPropertyOverride[] ReadDataFile(string data)
+    private static List<MaterialPropertyOverride> ReadDataFile(string data)
     {
         List<MaterialPropertyOverride> result = new();
 
         if (string.IsNullOrEmpty(data))
-            return result.ToArray();
+            return result;
         
         var split = data.Split("|");
         
@@ -116,6 +120,6 @@ public class AssShader
             result.Add(o);
         }
 
-        return result.ToArray();
+        return result;
     }
 }

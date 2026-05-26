@@ -36,6 +36,8 @@ public class AdvancedSkin : MonoBehaviour
         AddShaderFeature(new LastLocalDamageTaken(this));
         AddShaderFeature(new LastRemoteDamageTaken(this));
         AddShaderFeature(new IsHost(this));
+        AddShaderFeature(new IsExplodeApplied(this));
+        AddShaderFeature(new TimeSinceExplodeApplied(this));
     }
 
     private void AddShaderFeature<T>(T feature) where T : ShaderFeature

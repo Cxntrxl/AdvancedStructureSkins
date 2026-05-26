@@ -14,17 +14,16 @@ namespace AdvancedStructureSkins.Shared.SDK.Binary
             {
                 writer.Write(1);
                 writer.Write(string.IsNullOrEmpty(manifest.skinName) ? manifest.name : manifest.skinName);
-                writer.Write(manifest.material?.name ?? "");
+                
                 writer.Write(manifest.previewTexture?.name ?? "");
                 writer.Write(manifest.allowedInComp);
-                writer.Write(manifest.overrides?.Count ?? 0);
-
-                if (manifest.overrides != null)
-                    foreach (var o in manifest.overrides)
-                        WriteOverride(writer, o);
+                
+                writer.Write(manifest.shaders?.Count ?? 0);
+                if (manifest.shaders != null)
+                    foreach (var m in manifest.shaders)
+                        WriteShaderManifest(writer, m);
 
                 writer.Write(manifest.textures?.Count ?? 0);
-
                 if (manifest.textures != null)
                     foreach (var t in manifest.textures)
                         WriteTextureSet(writer, t);
@@ -32,6 +31,16 @@ namespace AdvancedStructureSkins.Shared.SDK.Binary
                 return ms.ToArray();
             }
         }
+    }
+
+    public static void WriteShaderManifest(BinaryWriter writer, ShaderManifest manifest)
+    {
+        writer.Write(manifest.material?.name ?? "");
+        
+        writer.Write(manifest.overrides?.Count ?? 0);
+        if (manifest.overrides != null)
+            foreach (var o in manifest.overrides)
+                WriteOverride(writer, o);
     }
 
     private static void WriteOverride(BinaryWriter writer, MaterialPropertyOverride o)
@@ -80,31 +89,51 @@ namespace AdvancedStructureSkins.Shared.SDK.Binary
 
     public static SkinManifestBinary Read(byte[] bytes)
     {
-        SkinManifestBinary manifest = new SkinManifestBinary();
-
         using (MemoryStream ms = new MemoryStream(bytes))
         {
             using (BinaryReader reader = new BinaryReader(ms))
             {
-                manifest.version = reader.ReadInt32();
-                manifest.skinName = reader.ReadString();
-                manifest.materialName = reader.ReadString();
-                manifest.previewTextureName = reader.ReadString();
-                manifest.allowedInComp = reader.ReadBoolean();
-
-                int overrideCount = reader.ReadInt32();
-                manifest.overrides = new MaterialOverrideBinary[overrideCount];
-
-                for (int i = 0; i < overrideCount; i++) manifest.overrides[i] = ReadOverride(reader);
-
-                int textureCount = reader.ReadInt32();
-                manifest.textures = new TextureSetBinary[textureCount];
-
-                for (int i = 0; i < textureCount; i++) manifest.textures[i] = ReadTextureSet(reader);
-
-                return manifest;
+                switch (reader.ReadInt32())
+                {
+                    case 1: return ReadV1Manifest(reader);
+                }
             }
         }
+        
+        return null;
+    }
+
+    private static SkinManifestBinary ReadV1Manifest(BinaryReader reader)
+    {
+        SkinManifestBinary manifest = new SkinManifestBinary();
+        
+        manifest.skinName = reader.ReadString();
+        manifest.previewTextureName = reader.ReadString();
+        manifest.allowedInComp = reader.ReadBoolean();
+                
+        int shaderCount = reader.ReadInt32();
+        manifest.shaders = new ShaderManifestBinary[shaderCount];
+        for (int i = 0; i < shaderCount; i++) manifest.shaders[i] = ReadShaderManifest(reader);
+
+        int textureCount = reader.ReadInt32();
+        manifest.textures = new TextureSetBinary[textureCount];
+
+        for (int i = 0; i < textureCount; i++) manifest.textures[i] = ReadTextureSet(reader);
+
+        return manifest;
+    }
+
+    private static ShaderManifestBinary ReadShaderManifest(BinaryReader reader)
+    {
+        ShaderManifestBinary manifest = new ShaderManifestBinary();
+        manifest.materialName = reader.ReadString();
+        
+        int overridesCount = reader.ReadInt32();
+        manifest.overrides = new MaterialOverrideBinary[overridesCount];
+        
+        for (int i = 0; i < overridesCount; i++) manifest.overrides[i] = ReadOverride(reader);
+
+        return manifest;
     }
 
     private static MaterialOverrideBinary ReadOverride(BinaryReader reader)
