@@ -16,35 +16,13 @@ public class AdvancedSkin : MonoBehaviour
 {
     public AdvancedSkin(IntPtr ptr) : base(ptr) { }
     
-    public Structure parent;
+    public Structure structure;
     public GameObjectDebugger debugger;
-    public MeshRenderer MeshRenderer => parent.MeshRenderer;
+    public MeshRenderer MeshRenderer => structure.MeshRenderer;
     public AssShader currentShader;
     public AssTextureSet currentTexture;
 
-    public readonly Dictionary<Type, ShaderFeature> shaderFeatures = new();
-
-    public void Init()
-    {
-        AddShaderFeature(new CurrentVelocity(this));
-        AddShaderFeature(new TimeSinceLastModified(this));
-        AddShaderFeature(new TimeSinceLastPose(this)); 
-        AddShaderFeature(new TimeSinceGroundStateChanged(this));
-        AddShaderFeature(new TimeSinceHitstop(this)); 
-        AddShaderFeature(new TimeSinceLocalDamageTaken(this)); 
-        AddShaderFeature(new TimeSinceRemoteDamageTaken(this));
-        AddShaderFeature(new LastLocalDamageTaken(this));
-        AddShaderFeature(new LastRemoteDamageTaken(this));
-        AddShaderFeature(new IsHost(this));
-        AddShaderFeature(new IsExplodeApplied(this));
-        AddShaderFeature(new TimeSinceExplodeApplied(this));
-    }
-
-    private void AddShaderFeature<T>(T feature) where T : ShaderFeature
-    {
-        if (!shaderFeatures.ContainsKey(feature.GetType())) shaderFeatures.Add(feature.GetType(), feature);
-        else ASS.WarnVerbose("Tried adding a second " + feature.GetType() + " ShaderFeature to dictionary, ignored request.");
-    }
+    public Dictionary<Type, ShaderFeature> shaderFeatures = new();
     
     private void OnEnable()
     {
@@ -52,6 +30,7 @@ public class AdvancedSkin : MonoBehaviour
         debugger?.Clear();
         debugger?.BindDefaults(this);
 
+        shaderFeatures = AssAPI.GetFeaturesFor(this);
         foreach (var feature in shaderFeatures.Values) feature.OnEnable();
 
         Actions.onPlayerHealthChanged += PlayerHit;
@@ -60,6 +39,7 @@ public class AdvancedSkin : MonoBehaviour
     private void OnDisable()
     {
         Actions.onPlayerHealthChanged -= PlayerHit;
+        shaderFeatures.Clear();
     }
 
     private void PlayerHit(Player player, int change)
@@ -67,18 +47,23 @@ public class AdvancedSkin : MonoBehaviour
         if (player.Controller.ControllerType == ControllerType.Local)
         {
             GetShaderFeature<TimeSinceLocalDamageTaken>().ResetTimer();
-            GetShaderFeature<LastLocalDamageTaken>().SetProperty(ShaderPropertyType.Float, (float)change);
+            GetShaderFeature<LastLocalDamageTaken>().SetProperty((float)change);
         }
         else
         {
             GetShaderFeature<TimeSinceRemoteDamageTaken>().ResetTimer();
-            GetShaderFeature<LastRemoteDamageTaken>().SetProperty(ShaderPropertyType.Float, (float)change);
+            GetShaderFeature<LastRemoteDamageTaken>().SetProperty((float)change);
         }
     }
 
     private void Update()
     {
         foreach (var feature in shaderFeatures.Values) feature.Update();
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (var feature in shaderFeatures.Values) feature.FixedUpdate();
     }
 
     public T GetShaderFeature<T>() where T : ShaderFeature

@@ -12,11 +12,13 @@ public class ShaderFeature
     
     internal readonly AdvancedSkin target;
     internal readonly string propertyName;
-    private Material Material => target.MeshRenderer.material;
+    internal readonly ShaderPropertyType type;
+    private Material[] Materials => target.MeshRenderer.materials;
 
-    public ShaderFeature(AdvancedSkin target, string propertyName)
+    public ShaderFeature(AdvancedSkin target, ShaderPropertyType type, string propertyName)
     {
         this.target = target;
+        this.type = type;
         this.propertyName = propertyName;
     }
 
@@ -27,42 +29,52 @@ public class ShaderFeature
         if (!enabled) return;
         OnUpdate();
     }
-    
-    public virtual void OnUpdate() { }
 
-    public virtual void SetProperty<T>(ShaderPropertyType type, T value)
+    public void FixedUpdate()
     {
+        if (!enabled) return;
+        OnFixedUpdate();
+    }
+
+    protected virtual void OnUpdate() { }
+
+    protected virtual void OnFixedUpdate() { }
+
+    public virtual void SetProperty<T>(T value)
+    {
+        if (!enabled) return;
+        
         try
         {
             switch (type)
             {
                 case ShaderPropertyType.Color:
-                    if (value is Color color) Material.SetColor(propertyName, color);
+                    if (value is Color color) SetColor(color);
                     else ASS.WarnVerbose("Tried setting colour on ShaderFeature with a non-color value.");
                     break;
             
                 case ShaderPropertyType.Vector:
                     switch (value) {
-                        case Vector2 vector2: Material.SetVector(propertyName, vector2); break;
-                        case Vector3 vector3: Material.SetVector(propertyName, vector3); break;
-                        case Vector4 vector4: Material.SetVector(propertyName, vector4); break;
+                        case Vector2 vector2: SetVector(vector2); break;
+                        case Vector3 vector3: SetVector(vector3); break;
+                        case Vector4 vector4: SetVector(vector4); break;
                         default: ASS.WarnVerbose("Tried setting vector on ShaderFeature with a non-vector value."); break; 
                     }
                     break;
             
                 case ShaderPropertyType.Float:
                 case ShaderPropertyType.Range:
-                    if (value is float f) Material.SetFloat(propertyName, f);
+                    if (value is float f) SetFloat(f);
                     else ASS.WarnVerbose("Tried setting float on ShaderFeature with a non-float value.");
                     break;
             
                 case ShaderPropertyType.Texture:
-                    if (value is Texture texture) Material.SetTexture(propertyName, texture);
+                    if (value is Texture texture) SetTexture(texture);
                     else ASS.WarnVerbose("Tried setting texture on ShaderFeature with a non-texture value.");
                     break;
             
                 case ShaderPropertyType.Int:
-                    if (value is int i) Material.SetInt(propertyName, i);
+                    if (value is int i) SetInt(i);
                     else ASS.WarnVerbose("Tried setting int on ShaderFeature with a non-int value.");
                     break;
             
@@ -71,5 +83,30 @@ public class ShaderFeature
                     break;
             }
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+    }
+
+    private void SetColor(Color value)
+    {
+        foreach (Material mat in Materials) mat.SetColor(propertyName, value);
+    }
+
+    private void SetVector(Vector4 value)
+    {
+        foreach (Material mat in Materials) mat.SetVector(propertyName, value);
+    }
+
+    private void SetFloat(float value)
+    {
+        foreach (Material mat in Materials) mat.SetFloat(propertyName, value);
+    }
+
+    private void SetTexture(Texture value)
+    {
+        foreach (Material mat in Materials) mat.SetTexture(propertyName, value);
+    }
+
+    private void SetInt(int value)
+    {
+        foreach (Material mat in Materials) mat.SetInt(propertyName, value);
     }
 }

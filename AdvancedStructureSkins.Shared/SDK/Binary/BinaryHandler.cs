@@ -15,7 +15,7 @@ namespace AdvancedStructureSkins.Shared.SDK.Binary
                 writer.Write(1);
                 writer.Write(string.IsNullOrEmpty(manifest.skinName) ? manifest.name : manifest.skinName);
                 
-                writer.Write(manifest.previewTexture?.name ?? "");
+                writer.Write(manifest.previewTexture != null ? manifest.previewTexture.name : "");
                 writer.Write(manifest.allowedInComp);
                 
                 writer.Write(manifest.shaders?.Count ?? 0);

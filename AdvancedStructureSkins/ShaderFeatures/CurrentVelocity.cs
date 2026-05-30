@@ -6,13 +6,13 @@ namespace AdvancedStructureSkins.ShaderFeatures;
 
 public class CurrentVelocity : ShaderFeature
 {
-    private Structure Structure => target.parent;
+    private Structure Structure => target.structure;
     
-    public CurrentVelocity(AdvancedSkin target) : base(target, "_currentVelocity") { }
+    public CurrentVelocity(AdvancedSkin target) : base(target, ShaderPropertyType.Vector, "_currentVelocity") { }
 
-    public override void OnUpdate()
+    protected override void OnUpdate()
     {
         base.OnUpdate();
-        SetProperty(ShaderPropertyType.Vector, Structure.CurrentVelocity);
+        SetProperty(Structure.CurrentVelocity);
     }
 }

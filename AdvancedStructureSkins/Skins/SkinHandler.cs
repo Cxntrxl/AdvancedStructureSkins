@@ -200,32 +200,35 @@ public static class SkinHandler
 
         MeshRenderer mr = advancedSkin.MeshRenderer;
 
-        foreach (ShaderManifest manifest in manifests)
+        for (int mat = 0; mat < shader.shaders.Count; mat++)
         {
-            for (int i = 0; i < manifest.overrides.Count; i++)
+            for (int over = 0; over < shader.shaders[mat].overrides.Count; over++)
             {
-                if (manifest.overrides[i] == null) continue;
-                if ((manifest.overrides[i].targetStructures & type) == 0) continue;
-                if (mr.materials.Count < i) continue;
-                if (mr.materials[i] == null) continue;
+                ShaderManifest manifest = shader.shaders[mat];
+                MaterialPropertyOverride ov = manifest.overrides[over];
                 
-                switch (manifest.overrides[i].propertyType)
+                if (manifest.overrides[over] == null) continue;
+                if ((manifest.overrides[over].targetStructures & type) == 0) continue;
+                if (mr.materials.Count < mat) continue;
+                if (mr.materials[mat] == null) continue;
+                
+                switch (manifest.overrides[over].propertyType)
                 {
                     case ShaderPropertyType.Color:
-                        mr.materials[i].SetColor(manifest.overrides[i].propertyName, manifest.overrides[i].colorValue);
+                        mr.materials[mat].SetColor(ov.propertyName, ov.colorValue);
                         break;
                     case ShaderPropertyType.Vector:
-                        mr.materials[i].SetVector(manifest.overrides[i].propertyName, manifest.overrides[i].vectorValue);
+                        mr.materials[mat].SetVector(ov.propertyName, ov.vectorValue);
                         break;
                     case ShaderPropertyType.Float:
                     case ShaderPropertyType.Range:
-                        mr.materials[i].SetFloat(manifest.overrides[i].propertyName, manifest.overrides[i].floatValue);
+                        mr.materials[mat].SetFloat(ov.propertyName, ov.floatValue);
                         break;
                     case ShaderPropertyType.Texture:
-                        mr.materials[i].SetTexture(manifest.overrides[i].propertyName, manifest.overrides[i].textureValue);
+                        mr.materials[mat].SetTexture(ov.propertyName, ov.textureValue);
                         break;
                     case ShaderPropertyType.Int:
-                        mr.materials[i].SetInt(manifest.overrides[i].propertyName, manifest.overrides[i].intValue);
+                        mr.materials[mat].SetInt(ov.propertyName, ov.intValue);
                         break;
                 }
             }

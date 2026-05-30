@@ -1,16 +1,34 @@
-Version 1.3.3
+# Version 2.0.0
+This version contains an ENORMOUS internal restructure, evolving past the old, frankly hacked together codebase I used to have. This should make it *far* easier to update the mod and to develop new features in general. It should've also fixed the vast majority of the bugs from the older versions.
+
+I've also changed the skin bundle format from .bundle to .asb. While the name change is purely cosmetic, it signifies a larger internal rework of the format. .bundle files can still be loaded fine, and will be supported indefinitely, but .asb files are the new format going forward. 
+
+.asb files can also store more than just shaders - they can work as entire texture packs. This means skin developers can build textures to a .asb file if they wish, allowing users to import them with a single drag-and-drop, rather than the sluggish folder-based system that existed previously. Don't worry though, the old folder system is also still supported, so updating to this version will keep compatibility with all previous setups.
+
+### Additions
+Added UIFramework support, replacing ModUI.
+
+Added Custom UI, streamlining shader and texture skin selection - HUGE thanks to IListenToSound for his incredible work on UIFramework.
+
+Added "ShaderFeatures", an internal system for adding additional 'effects' shaders can play with. Read more in the [Supported Shader Properties](https://thunderstore.io/c/rumble/p/Cxntrxl/AdvancedStructureSkins/wiki/5232-supported-shader-properties/) wiki page.
+
+Added "Competitive Mode", a toggle in the mod's UIFramework menu which automatically disables skins which provide a reasonably measurable competitive advantage (higher visibility grounded effects, hitstop indicators, ect)
+
+Added "Debug Mode", a toggle in the mod's UIFramework menu which enables verbose logs, providing greater detail for debugging purposes. These logs are disabled by default so users don't have their consoles filled with unnecessary logs.
+
+# Version 1.3.3
 ### Fixes
 Fixed an incompatibility with DieHarder by TacoSlayer
 
-Version 1.3.2
+# Version 1.3.2
 ### Fixes
 Fixed error in loading persistent settings where the mod would fail to initialize if I attempted to load a setting that doesn't exist.
 
-Version 1.3.1 - [BROKEN]
+# Version 1.3.1 - [BROKEN]
 ### Changes
 Implemented support for OptimizedGraphicsFix to improve mod compatibility
 
-Version 1.3.0
+# Version 1.3.0
 ### Fixes
 Shaders now display lighting correctly again. Existing shaders will need to be rebuilt to ignore normals, as the default normal map is now stylized.
 

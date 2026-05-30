@@ -113,6 +113,9 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\UIFramework" />
+      <EmbeddedResource Include="Resources\Cosmetics" />
+      <None Remove="Resources\icon.png" />
+      <EmbeddedResource Include="Resources\icon.png" />
     </ItemGroup>
 
     <Target Name="CopyBuiltDll" AfterTargets="Build">

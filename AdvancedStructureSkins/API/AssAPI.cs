@@ -1,16 +1,11 @@
-﻿using AdvancedStructureSkins.Shared.SDK;
+﻿using AdvancedStructureSkins.ShaderFeatures;
+using AdvancedStructureSkins.Shared.SDK;
 using AdvancedStructureSkins.Shared.SDK.Binary;
 using AdvancedStructureSkins.Skins;
 using AdvancedStructureSkins.UI;
-using AdvancedStructureSkins.Util;
-using Il2CppInterop.Runtime.Injection;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppNewtonsoft.Json;
 using MelonLoader.Utils;
 using RumbleModdingAPI.RMAPI;
 using UnityEngine;
-using UnityEngine.Playables;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AdvancedStructureSkins.API;
 
@@ -21,7 +16,7 @@ public static class AssAPI
     private static string _skinDirectory = Path.Combine(MelonEnvironment.UserDataDirectory, "Skins");
 
     internal static readonly List<AssTextureSet> TextureSets = new();
-    public static readonly Dictionary<StructureFlags, List<AssTextureSet>> TextureSetsByTarget = new();
+    private static readonly Dictionary<StructureFlags, List<AssTextureSet>> TextureSetsByTarget = new();
     private static readonly Dictionary<string, StructureFlags> StructureFlagMap = new(StringComparer.OrdinalIgnoreCase) {
             { "Disc", StructureFlags.Disc },
             { "Pillar", StructureFlags.Pillar },
@@ -31,10 +26,14 @@ public static class AssAPI
             { "SmallRock", StructureFlags.SmallRock },
             { "LargeRock", StructureFlags.LargeRock }
         };
+
+    private static readonly List<Type> ShaderFeatures = new();
     
     public static void Init()
     {
         ASS.LogVerbose("Initializing AssAPI");
+
+        RegisterModShaderFeatures();
         
         _skinDirectory = Path.Combine(MelonEnvironment.UserDataDirectory, "Skins");
         
@@ -49,6 +48,8 @@ public static class AssAPI
         ASS.LogVerbose("AssAPI Initialized");
     }
 
+    #region Skin Loading
+    
     private static void LoadAdvancedSkinBundles()
     {
         var skins = GetSkinNames();
@@ -97,7 +98,7 @@ public static class AssAPI
                     SkinManifestBinary referenceManifest = BinaryHandler.Read(binary.bytes);
                     SkinManifest manifest = referenceManifest.GetSkinManifestFromBundle(bundle);
 
-                    Shaders.Add(LoadShaderFromManifest(manifest));
+                    if (manifest.shaders.Count > 0) Shaders.Add(LoadShaderFromManifest(manifest));
                     TextureSets.AddRange(LoadTextureSetsFromManifest(manifest));
                 }
                 catch (Exception ex)
@@ -125,7 +126,45 @@ public static class AssAPI
         Directory.CreateDirectory(_skinDirectory);
         return Array.Empty<string>();
     }
+    
+    #endregion
 
+    #region Shader Features
+
+    private static void RegisterModShaderFeatures()
+    {
+        RegisterShaderFeature<CurrentVelocity>();
+        RegisterShaderFeature<TimeSinceLastModified>();
+        RegisterShaderFeature<TimeSinceLastPose >();
+        RegisterShaderFeature<TimeSinceGroundStateChanged>();
+        RegisterShaderFeature<TimeSinceHitstop >();
+        RegisterShaderFeature<TimeSinceLocalDamageTaken >();
+        RegisterShaderFeature<TimeSinceRemoteDamageTaken>();
+        RegisterShaderFeature<LastLocalDamageTaken>();
+        RegisterShaderFeature<LastRemoteDamageTaken>();
+        RegisterShaderFeature<IsHost>();
+        RegisterShaderFeature<IsExplodeApplied>();
+        RegisterShaderFeature<TimeSinceExplodeApplied>();
+        RegisterShaderFeature<LocalPlayerPosition>();
+        RegisterShaderFeature<ClosestRemotePlayerPosition>();
+        RegisterShaderFeature<TimeSinceHitByExplosion>();
+        RegisterShaderFeature<LastExplosionStrength>();
+        RegisterShaderFeature<SmoothVelocity>();
+    }
+    
+    public static void RegisterShaderFeature<T>() where T : ShaderFeature
+    {
+        if (!ShaderFeatures.Contains(typeof(T))) ShaderFeatures.Add(typeof(T));
+        else ASS.Warn("Tried registering second " + typeof(T).Name + " ShaderFeature, ignored request.");
+    }
+
+    public static Dictionary<Type, ShaderFeature> GetFeaturesFor(AdvancedSkin skin)
+    {
+        return ShaderFeatures.ToDictionary(t => t, t => (ShaderFeature)Activator.CreateInstance(t, skin));
+    }
+    
+    #endregion
+    
     #region UI
     
     internal static string Serialize()

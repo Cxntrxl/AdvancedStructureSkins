@@ -40,6 +40,7 @@ namespace AdvancedStructureSkins.Shared.SDK.Binary
                     break;
                 case ShaderPropertyType.Texture:
                     result.textureValue = GetTextureFromBundle(bundle);
+                    result.textureValue.hideFlags = HideFlags.DontUnloadUnusedAsset;
                     break;
                 case ShaderPropertyType.Int:
                     result.intValue = intValue;

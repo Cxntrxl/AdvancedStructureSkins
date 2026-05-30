@@ -1,6 +1,8 @@
 ﻿using AdvancedStructureSkins.ShaderFeatures;
 using HarmonyLib;
+using Il2CppRUMBLE.Combat.ShiftStones;
 using Il2CppRUMBLE.MoveSystem;
+using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace AdvancedStructureSkins.Skins;
@@ -13,7 +15,7 @@ public static class StructureSpawnPatch
         try
         {
             SkinHandler.ApplySkinTo(__instance); 
-            __instance.GetComponent<AdvancedSkin>().GetShaderFeature<IsExplodeApplied>().SetProperty(ShaderPropertyType.Float, 0f);
+            __instance.GetComponent<AdvancedSkin>().GetShaderFeature<IsExplodeApplied>().SetProperty(0f);
         }
         catch (Exception ex) { ASS.Error(ex); }
     }
@@ -27,8 +29,7 @@ public static class StructureStartPatch
         try
         {
             AdvancedSkin skin = __instance.gameObject.AddComponent<AdvancedSkin>();
-            skin.parent = __instance;
-            skin.Init();
+            skin.structure = __instance;
         }
         catch (Exception ex) { ASS.Error(ex); }
     }
@@ -81,8 +82,45 @@ public static class ExplodeModifierExecutePatch
             
             AdvancedSkin skin = comp.GetComponent<AdvancedSkin>();
             
-            skin?.GetShaderFeature<IsExplodeApplied>().SetProperty(ShaderPropertyType.Float, 1f);
+            skin?.GetShaderFeature<IsExplodeApplied>().SetProperty(1f);
             skin?.GetShaderFeature<TimeSinceExplodeApplied>().ResetTimer();
+        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+    }
+}
+
+// classic buckethead typo
+[HarmonyPatch(typeof(ExplodeModifier.__c__DisplayClass11_0), "_Execute_g__OnStructureDetroyed_0")]
+public static class OnExplodePatch
+{
+    public static void Prefix(ExplodeModifier.__c__DisplayClass11_0 __instance)
+    {
+        try
+        {
+            var structure = __instance.structure;
+            var stones = __instance.shiftstoneSystem;
+
+            float multiplier = stones.GetTotalMultiplier(
+                PlayerMultiplier.MultiplierType.ExplosionForces,
+                1f,
+                true,
+                structure);
+
+            Structure[] nearbyStructures =
+                CombatManager.Instance.GetStructuresInRange(structure.transform.position, 3f, false, out _);
+
+            foreach (Structure s in nearbyStructures)
+            {
+                if (s == structure) continue;
+                
+                AdvancedSkin skin = s.GetComponent<AdvancedSkin>();
+                skin?.GetShaderFeature<TimeSinceHitByExplosion>().ResetTimer();
+
+                Vector3 force = (structure.transform.position - s.transform.position).normalized *
+                              (1000 * structure.GetTotalTier()) * multiplier;
+                
+                skin?.GetShaderFeature<LastExplosionStrength>().SetProperty(force.magnitude);
+            }
+            
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
     }
 }

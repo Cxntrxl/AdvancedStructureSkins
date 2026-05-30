@@ -155,7 +155,7 @@ public class GameObjectDebugger : MonoBehaviour
         try
         {
             BindPersistent("Tint", skin.MeshRenderer.material.GetColor("Color_D943764B").ToString);
-            BindPersistent("Velocity", skin.parent.currentVelocity.ToString);
+            BindPersistent("Velocity", skin.structure.currentVelocity.ToString);
             BindPersistent("Shader", skin.currentShader != null ? skin.currentShader.name.ToString : () => "null");
             BindPersistent("Texture Set", skin.currentTexture != null ? skin.currentTexture.name.ToString : () => "null");
         }
