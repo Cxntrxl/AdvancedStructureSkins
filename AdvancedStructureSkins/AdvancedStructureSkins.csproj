@@ -123,5 +123,9 @@
                 SourceFiles="$(TargetPath)"
                 DestinationFolder="E:\SteamLibrary\steamapps\common\RUMBLE\Mods" 
         />
+        <Copy
+                SourceFiles="$(TargetPath)"
+                DestinationFolder="E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\_ThunderstoreBuilds\Mods"
+        />
     </Target>
 </Project>

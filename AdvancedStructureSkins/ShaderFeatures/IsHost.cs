@@ -8,7 +8,7 @@ public class IsHost : ShaderFeature
 {
     private static bool Host => !PhotonNetwork.InRoom || PhotonNetwork.IsMasterClient;
     
-    public IsHost(AdvancedSkin target) : base(target, ShaderPropertyType.Int,"_isHost") { }
+    public IsHost(AdvancedSkin target) : base(target, ShaderPropertyType.Int,"_isHost", 0) { }
     
     public override void OnEnable()
     {

@@ -6,7 +6,7 @@ namespace AdvancedStructureSkins.ShaderFeatures;
 
 public class SmoothVelocity : ShaderFeature
 {
-    public SmoothVelocity(AdvancedSkin target) : base(target, ShaderPropertyType.Vector, "_smoothVelocity") { }
+    public SmoothVelocity(AdvancedSkin target) : base(target, ShaderPropertyType.Vector, "_smoothVelocity", Vector3.zero) { }
 
     private struct Sample
     {

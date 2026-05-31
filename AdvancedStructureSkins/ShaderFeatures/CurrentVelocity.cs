@@ -1,4 +1,5 @@
-﻿using AdvancedStructureSkins.Skins;
+﻿using System.Numerics;
+using AdvancedStructureSkins.Skins;
 using Il2CppRUMBLE.MoveSystem;
 using UnityEngine.Rendering;
 
@@ -8,7 +9,7 @@ public class CurrentVelocity : ShaderFeature
 {
     private Structure Structure => target.structure;
     
-    public CurrentVelocity(AdvancedSkin target) : base(target, ShaderPropertyType.Vector, "_currentVelocity") { }
+    public CurrentVelocity(AdvancedSkin target) : base(target, ShaderPropertyType.Vector, "_currentVelocity", Vector3.Zero) { }
 
     protected override void OnUpdate()
     {

@@ -1,4 +1,5 @@
-﻿using AdvancedStructureSkins.ShaderFeatures;
+﻿using System.Reflection;
+using AdvancedStructureSkins.ShaderFeatures;
 using AdvancedStructureSkins.Shared.SDK;
 using AdvancedStructureSkins.Shared.SDK.Binary;
 using AdvancedStructureSkins.Skins;
@@ -160,7 +161,15 @@ public static class AssAPI
 
     public static Dictionary<Type, ShaderFeature> GetFeaturesFor(AdvancedSkin skin)
     {
-        return ShaderFeatures.ToDictionary(t => t, t => (ShaderFeature)Activator.CreateInstance(t, skin));
+        return ShaderFeatures.ToDictionary(t => t, t =>
+        {
+            ConstructorInfo ctor = t.GetConstructor(new[] { typeof(AdvancedSkin) });
+
+            if (ctor != null) return (ShaderFeature)ctor.Invoke(new object[] { skin });
+            
+            ASS.Error("Could not locate \"AdvancedSkin target\" Constructor for " + t.FullName);
+            return null;
+        });
     }
     
     #endregion

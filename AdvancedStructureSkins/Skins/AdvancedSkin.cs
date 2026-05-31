@@ -76,6 +76,6 @@ public class AdvancedSkin : MonoBehaviour
 
     public void RefreshEnabledShaderFeatures()
     {
-        foreach (ShaderFeature feature in shaderFeatures.Values) { feature.enabled = !UIHandler.CompMode.Value && MeshRenderer.material.HasProperty(feature.propertyName); }
+        foreach (ShaderFeature feature in shaderFeatures.Values) { feature.enabled = !UIHandler.CompMode.Value && MeshRenderer.material.HasProperty(feature.propertyName); feature.OnEnable(); }
     }
 }

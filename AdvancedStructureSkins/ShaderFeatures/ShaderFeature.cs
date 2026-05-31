@@ -13,16 +13,23 @@ public class ShaderFeature
     internal readonly AdvancedSkin target;
     internal readonly string propertyName;
     internal readonly ShaderPropertyType type;
+    internal readonly object defaultValue;
     private Material[] Materials => target.MeshRenderer.materials;
 
-    public ShaderFeature(AdvancedSkin target, ShaderPropertyType type, string propertyName)
+    public ShaderFeature(AdvancedSkin target, ShaderPropertyType type, string propertyName, object defaultValue)
     {
         this.target = target;
         this.type = type;
         this.propertyName = propertyName;
+        this.defaultValue = defaultValue;
     }
 
-    public virtual void OnEnable() { }
+    public virtual void OnEnable()
+    {
+        if (!enabled) return;
+        
+        SetProperty(defaultValue);
+    }
     
     public void Update()
     {

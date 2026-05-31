@@ -105,14 +105,16 @@ All other material properties will be updated consistently on additional materia
 ### Creating Expansion Mods
 You can now create your own expansions to Advanced Structure Skins, adding custom `ShaderFeature` classes to the mod. These allow you to use code to easily manage properties on a shader on a per-structure or global level.
 
-To create a `ShaderFeature`, first add Advanced Structure Skins as a reference. Then, override either `ShaderFeature` or `TimedShaderFeature`, depending on your use case. Your `ShaderFeature` will require a constructor. It'll want three parameters, `AdvancedSkin target` `ShaderPropertyType type` and `string propertyName`. Your `ShaderFeature`'s constructor shouldn't require a `type` or `propertyName` input, and instead should set them explicitly in the base class's underlying constructor.
+To create a `ShaderFeature`, first add Advanced Structure Skins as a reference. Then, override either `ShaderFeature` or `TimedShaderFeature`, depending on your use case. Your `ShaderFeature` will require a constructor. It'll want three parameters, `AdvancedSkin target` `ShaderPropertyType type`, `string propertyName` and `object defaultValue`. Your `ShaderFeature`'s constructor shouldn't require a `type`, `propertyName` or `defaultValue` input, and instead should set them explicitly in the base class's underlying constructor.
+
+It's important that the value you assign in the base class's constructor is a valid input for your property's type, otherwise it will throw an error in `OnEnable()`. `TimedShaderFeature`s don't have to assign a default value, and will default to `999f`. You *can* still provide a different default value if you want though.
 
 ```csharp
 public class CurrentVelocity : ShaderFeature
 {
     private Structure Structure => target.structure;
     
-    public CurrentVelocity(AdvancedSkin target) : base(target, ShaderPropertyType.Vector, "_currentVelocity") { }
+    public CurrentVelocity(AdvancedSkin target) : base(target, ShaderPropertyType.Vector, "_currentVelocity", Vector3.zero) { }
 
     protected override void OnUpdate()
     {

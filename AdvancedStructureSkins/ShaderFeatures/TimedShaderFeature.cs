@@ -9,13 +9,13 @@ public class TimedShaderFeature : ShaderFeature
     private float _time = 0;
     private bool _counting = true;
 
-    public TimedShaderFeature(AdvancedSkin target, ShaderPropertyType type, string propertyName) : base(target, type, propertyName) { }
+    public TimedShaderFeature(AdvancedSkin target, ShaderPropertyType type, string propertyName, float defaultValue = 999f) : base(target, type, propertyName, defaultValue) { }
 
     public override void OnEnable()
     {
         base.OnEnable();
         if (!enabled) return;
-        ResetTimer();
+        _time = (float)defaultValue;
     }
 
     protected override void OnUpdate()
