@@ -65,11 +65,18 @@ public static class BulkPatcher
             if (comp == null) return;
             
             AdvancedSkin skin = comp.GetComponent<AdvancedSkin>();
-            
-            skin?.GetShaderFeature<TimeSinceLastModified>().ResetTimer();
-            
-            foreach (AdvancedSkin s in UnityEngine.Object.FindObjectsOfType<AdvancedSkin>().Where(skin => skin.shaderFeatures[typeof(TimeSinceLastPose)].enabled))
-                s.GetShaderFeature<TimeSinceLastPose>().ResetTimer();
+            TimeSinceLastModified feature = skin?.GetShaderFeature<TimeSinceLastModified>();
+            feature?.ResetTimer();
+
+            foreach (AdvancedSkin s in UnityEngine.Object.FindObjectsOfType<AdvancedSkin>())
+            {
+                if (!s || !s.isActiveAndEnabled) continue;
+                var pose = s.GetShaderFeature<TimeSinceLastPose>();
+                if (pose is not { enabled: true })
+                    continue;
+
+                pose.ResetTimer();
+            }
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
     }
 }

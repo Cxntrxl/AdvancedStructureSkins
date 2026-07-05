@@ -161,6 +161,24 @@ public static class AssAPI
 
     public static Dictionary<Type, ShaderFeature> GetFeaturesFor(AdvancedSkin skin)
     {
+        Dictionary<Type, ShaderFeature> features = new Dictionary<Type, ShaderFeature>();
+        
+        foreach (var t in ShaderFeatures)
+        {
+            ASS.LogVerbose("Creating ShaderFeature " + t.Name + " for Structure " + skin.name, true);
+            
+            ConstructorInfo ctor = t.GetConstructor(new[] { typeof(AdvancedSkin) });
+            if (ctor == null)
+            {
+                ASS.Error("Could not locate \"AdvancedSkin target\" Constructor for " + t.FullName);
+                continue;
+            }
+            
+            features.Add(t, (ShaderFeature)ctor.Invoke(new object[] { skin }));
+        }
+
+        return features;
+        
         return ShaderFeatures.ToDictionary(t => t, t =>
         {
             ConstructorInfo ctor = t.GetConstructor(new[] { typeof(AdvancedSkin) });

@@ -5,5 +5,5 @@ namespace AdvancedStructureSkins.ShaderFeatures;
 
 public class TimeSinceLastModified : TimedShaderFeature
 {
-    public TimeSinceLastModified(AdvancedSkin target) : base(target, ShaderPropertyType.Float, "_timeSinceLastModified") { }
+    public TimeSinceLastModified(AdvancedSkin target) : base(target, "_timeSinceLastModified") { }
 }

@@ -5,5 +5,5 @@ namespace AdvancedStructureSkins.ShaderFeatures;
 
 public class IsExplodeApplied : ShaderFeature
 {
-    public IsExplodeApplied(AdvancedSkin target) : base(target, ShaderPropertyType.Float, "_isExplodeApplied", 0) { }
+    public IsExplodeApplied(AdvancedSkin target) : base(target, ShaderPropertyType.Float, "_isExplodeApplied", 0f) { }
 }

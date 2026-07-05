@@ -57,7 +57,7 @@ public class ShaderFeature
             {
                 case ShaderPropertyType.Color:
                     if (value is Color color) SetColor(color);
-                    else ASS.WarnVerbose("Tried setting colour on ShaderFeature with a non-color value.");
+                    else ASS.WarnVerbose($"Tried setting colour on {GetType().Name} with a non-color value.");
                     break;
             
                 case ShaderPropertyType.Vector:
@@ -65,28 +65,28 @@ public class ShaderFeature
                         case Vector2 vector2: SetVector(vector2); break;
                         case Vector3 vector3: SetVector(vector3); break;
                         case Vector4 vector4: SetVector(vector4); break;
-                        default: ASS.WarnVerbose("Tried setting vector on ShaderFeature with a non-vector value."); break; 
+                        default: ASS.WarnVerbose($"Tried setting vector on {GetType().Name} with a non-vector value."); break; 
                     }
                     break;
             
                 case ShaderPropertyType.Float:
                 case ShaderPropertyType.Range:
                     if (value is float f) SetFloat(f);
-                    else ASS.WarnVerbose("Tried setting float on ShaderFeature with a non-float value.");
+                    else ASS.WarnVerbose($"Tried setting float on {GetType().Name} with a non-float value.");
                     break;
             
                 case ShaderPropertyType.Texture:
                     if (value is Texture texture) SetTexture(texture);
-                    else ASS.WarnVerbose("Tried setting texture on ShaderFeature with a non-texture value.");
+                    else ASS.WarnVerbose($"Tried setting texture on {GetType().Name} with a non-texture value.");
                     break;
             
                 case ShaderPropertyType.Int:
                     if (value is int i) SetInt(i);
-                    else ASS.WarnVerbose("Tried setting int on ShaderFeature with a non-int value.");
+                    else ASS.WarnVerbose($"Tried setting int on {GetType().Name} with a non-int value.");
                     break;
             
                 default:
-                    ASS.Warn("Tried setting invalid type on ShaderFeature");
+                    ASS.Warn($"Tried setting invalid type \"{typeof(T).Name}\" on {GetType().Name}");
                     break;
             }
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
@@ -115,5 +115,31 @@ public class ShaderFeature
     private void SetInt(int value)
     {
         foreach (Material mat in Materials) mat.SetInt(propertyName, value);
+    }
+
+    public virtual object GetProperty()
+    {
+        if (Materials.Length == 0) return null;
+
+        Material mat = Materials[0];
+
+        try
+        {
+            return type switch
+            {
+                ShaderPropertyType.Color => mat.GetColor(propertyName),
+                ShaderPropertyType.Vector => mat.GetVector(propertyName),
+                ShaderPropertyType.Float => mat.GetFloat(propertyName),
+                ShaderPropertyType.Range => mat.GetFloat(propertyName),
+                ShaderPropertyType.Texture => mat.GetTexture(propertyName),
+                ShaderPropertyType.Int => mat.GetInt(propertyName),
+                _ => null
+            };
+        }
+        catch (Exception ex)
+        {
+            ASS.ErrorVerbose(ex);
+            return null;
+        }
     }
 }

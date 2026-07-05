@@ -30,7 +30,7 @@
         />
         <Copy
                 SourceFiles="$(TargetPath)"
-                DestinationFolder="E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\_ThunderstoreBuilds\UserLibs"
+                DestinationFolder="E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\_ThunderstoreBuilds\AdvancedStructureSkins\UserLibs"
         />
     </Target>
     

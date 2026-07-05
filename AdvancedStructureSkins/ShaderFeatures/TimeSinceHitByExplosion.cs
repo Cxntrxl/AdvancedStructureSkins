@@ -5,5 +5,5 @@ namespace AdvancedStructureSkins.ShaderFeatures;
 
 public class TimeSinceHitByExplosion : TimedShaderFeature
 {
-    public TimeSinceHitByExplosion(AdvancedSkin target) : base(target, ShaderPropertyType.Float, "_timeSinceHitByExplosion") { }
+    public TimeSinceHitByExplosion(AdvancedSkin target) : base(target, "_timeSinceHitByExplosion") { }
 }

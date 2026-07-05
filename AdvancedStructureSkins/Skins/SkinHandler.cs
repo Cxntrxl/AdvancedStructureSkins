@@ -51,6 +51,8 @@ public static class SkinHandler
 
     public static void ApplySkinTo(Structure structure)
     {
+        if (!structure.isActiveAndEnabled) return;
+        
         if (!Types.Keys.Contains(structure.gameObject.name))
         {
             ASS.Warn("Found unsupported structure with name '" +  structure.gameObject.name + "'");
@@ -79,6 +81,10 @@ public static class SkinHandler
         
         ApplyShaderTo(advancedSkin, type, shader);
         ApplyOverridesTo(advancedSkin, type, shader);
+        
+        advancedSkin.shaderFeatures = AssAPI.GetFeaturesFor(advancedSkin);
+        advancedSkin.RefreshEnabledShaderFeatures();
+        advancedSkin.ShaderFeaturesOnEnable();
     }
 
     private static void TrySaveDefaults(AdvancedSkin advancedSkin, StructureFlags type)
@@ -174,7 +180,6 @@ public static class SkinHandler
 
         mr.materials = materials;
         
-        advancedSkin.RefreshEnabledShaderFeatures();
         advancedSkin.currentShader = shader;
     }
 

@@ -1,0 +1,10 @@
+{
+    "name": "AdvancedStructureSkins",
+    "version_number": "2.0.0",
+    "website_url": "https://github.com/Cxntrxl/AdvancedStructureSkinsSDK",
+    "description": "Customize your structures like we've never seen before! Supports all HLSL and Shader Graph shaders.",
+    "dependencies": [
+        "UlvakSkillz-RumbleModdingAPI-5.3.0",
+	"Reverb_and___and_Spice-UIFramework-0.10.0"
+    ]
+}

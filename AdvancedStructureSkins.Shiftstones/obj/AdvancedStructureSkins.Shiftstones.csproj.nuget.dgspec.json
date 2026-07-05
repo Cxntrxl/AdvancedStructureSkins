@@ -1,0 +1,178 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shiftstones\\AdvancedStructureSkins.Shiftstones.csproj": {}
+  },
+  "projects": {
+    "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shared\\AdvancedStructureSkins.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shared\\AdvancedStructureSkins.Shared.csproj",
+        "projectName": "AdvancedStructureSkins.Shared",
+        "projectPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shared\\AdvancedStructureSkins.Shared.csproj",
+        "packagesPath": "C:\\Users\\Cxntrxl\\.nuget\\packages\\",
+        "outputPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Cxntrxl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Users\\Cxntrxl\\.dotnet\\sdk\\6.0.428\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shiftstones\\AdvancedStructureSkins.Shiftstones.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shiftstones\\AdvancedStructureSkins.Shiftstones.csproj",
+        "projectName": "ShiftstoneStructureSkins",
+        "projectPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shiftstones\\AdvancedStructureSkins.Shiftstones.csproj",
+        "packagesPath": "C:\\Users\\Cxntrxl\\.nuget\\packages\\",
+        "outputPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shiftstones\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Cxntrxl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins\\AdvancedStructureSkins.csproj": {
+                "projectPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins\\AdvancedStructureSkins.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\Cxntrxl\\.dotnet\\sdk\\6.0.428\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins\\AdvancedStructureSkins.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins\\AdvancedStructureSkins.csproj",
+        "projectName": "AdvancedStructureSkins",
+        "projectPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins\\AdvancedStructureSkins.csproj",
+        "packagesPath": "C:\\Users\\Cxntrxl\\.nuget\\packages\\",
+        "outputPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Cxntrxl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shared\\AdvancedStructureSkins.Shared.csproj": {
+                "projectPath": "E:\\_Projects\\_Mods\\_RUMBLE\\AdvancedStructureSkins\\AdvancedStructureSkins.Shared\\AdvancedStructureSkins.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\Cxntrxl\\.dotnet\\sdk\\6.0.428\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

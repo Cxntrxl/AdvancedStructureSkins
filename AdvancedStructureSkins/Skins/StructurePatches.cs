@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 namespace AdvancedStructureSkins.Skins;
 
-[HarmonyPatch(typeof(Structure), "OnFetchFromPool")]
+[HarmonyPatch(typeof(Structure), nameof(Structure.OnFetchFromPool))]
 public static class StructureSpawnPatch
 {
     private static void Postfix(ref Structure __instance)
@@ -15,13 +15,13 @@ public static class StructureSpawnPatch
         try
         {
             SkinHandler.ApplySkinTo(__instance); 
-            __instance.GetComponent<AdvancedSkin>().GetShaderFeature<IsExplodeApplied>().SetProperty(0f);
+            //__instance.GetComponent<AdvancedSkin>().GetShaderFeature<IsExplodeApplied>()?.SetProperty(0f);
         }
         catch (Exception ex) { ASS.Error(ex); }
     }
 }
 
-[HarmonyPatch(typeof(Structure), "Awake")]
+[HarmonyPatch(typeof(Structure), nameof(Structure.Awake))]
 public static class StructureStartPatch
 {
     private static void Postfix(ref Structure __instance)
@@ -35,7 +35,7 @@ public static class StructureStartPatch
     }
 }
 
-[HarmonyPatch(typeof(Structure), "OnPhysicsStateChanged")]
+[HarmonyPatch(typeof(Structure), nameof(Structure.OnPhysicsStateChanged))]
 public static class StructurePhysicsStateChangedPatch
 {
     private static void Postfix(Structure.PhysicsState previousState, Structure.PhysicsState newState, Structure __instance)
@@ -43,7 +43,7 @@ public static class StructurePhysicsStateChangedPatch
         try
         {
             if (DidChangeGroundState(previousState, newState))
-                __instance.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceGroundStateChanged>().ResetTimer();
+                __instance.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceGroundStateChanged>()?.ResetTimer();
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
     }
 
@@ -58,14 +58,14 @@ public static class StructurePhysicsStateChangedPatch
     }
 }
 
-[HarmonyPatch(typeof(Structure), "Shake")]
+[HarmonyPatch(typeof(Structure), nameof(Structure.Shake))]
 public static class StructureShakePatch
 {
     private static void Postfix(float time, Structure __instance)
     {
         try
         {
-            __instance.gameObject.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceHitstop>().ResetTimer();
+            __instance.gameObject.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceHitstop>()?.ResetTimer();
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
     }
 }
@@ -82,27 +82,32 @@ public static class ExplodeModifierExecutePatch
             
             AdvancedSkin skin = comp.GetComponent<AdvancedSkin>();
             
-            skin?.GetShaderFeature<IsExplodeApplied>().SetProperty(1f);
-            skin?.GetShaderFeature<TimeSinceExplodeApplied>().ResetTimer();
+            skin?.GetShaderFeature<IsExplodeApplied>()?.SetProperty(1f);
+            skin?.GetShaderFeature<TimeSinceExplodeApplied>()?.ResetTimer();
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }
     }
 }
 
 // classic buckethead typo
-[HarmonyPatch(typeof(ExplodeModifier.__c__DisplayClass11_0), "_Execute_g__OnStructureDetroyed_0")]
+[HarmonyPatch(typeof(ExplodeModifier.__c__DisplayClass11_0), nameof(ExplodeModifier.__c__DisplayClass11_0._Execute_g__OnStructureDetroyed_0))]
 public static class OnExplodePatch
 {
     public static void Prefix(ExplodeModifier.__c__DisplayClass11_0 __instance)
     {
         try
         {
+            if (__instance == null) return;
+            
             var structure = __instance.structure;
+            if (structure == null) return;
+            
             var stones = __instance.shiftstoneSystem;
+            if (stones == null) return;
 
             float multiplier = stones.GetTotalMultiplier(
                 PlayerMultiplier.MultiplierType.ExplosionForces,
                 1f,
-                true,
+                false,
                 structure);
 
             Structure[] nearbyStructures =
@@ -113,12 +118,12 @@ public static class OnExplodePatch
                 if (s == structure) continue;
                 
                 AdvancedSkin skin = s.GetComponent<AdvancedSkin>();
-                skin?.GetShaderFeature<TimeSinceHitByExplosion>().ResetTimer();
+                skin?.GetShaderFeature<TimeSinceHitByExplosion>()?.ResetTimer();
 
                 Vector3 force = (structure.transform.position - s.transform.position).normalized *
                               (1000 * structure.GetTotalTier()) * multiplier;
                 
-                skin?.GetShaderFeature<LastExplosionStrength>().SetProperty(force.magnitude);
+                skin?.GetShaderFeature<LastExplosionStrength>()?.SetProperty(force.magnitude);
             }
             
         } catch (Exception ex) { ASS.ErrorVerbose(ex); }

@@ -125,7 +125,7 @@
         />
         <Copy
                 SourceFiles="$(TargetPath)"
-                DestinationFolder="E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\_ThunderstoreBuilds\Mods"
+                DestinationFolder="E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\_ThunderstoreBuilds\AdvancedStructureSkins\Mods"
         />
     </Target>
 </Project>

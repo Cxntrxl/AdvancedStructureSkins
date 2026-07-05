@@ -30,16 +30,13 @@ public class AdvancedSkin : MonoBehaviour
         debugger?.Clear();
         debugger?.BindDefaults(this);
 
-        shaderFeatures = AssAPI.GetFeaturesFor(this);
-        foreach (var feature in shaderFeatures.Values) feature.OnEnable();
-
+        ASS.LogVerbose("AdvancedSkin OnEnable() on " + name, true);
         Actions.onPlayerHealthChanged += PlayerHit;
     }
 
     private void OnDisable()
     {
         Actions.onPlayerHealthChanged -= PlayerHit;
-        shaderFeatures.Clear();
     }
 
     private void PlayerHit(Player player, int change)
@@ -58,11 +55,13 @@ public class AdvancedSkin : MonoBehaviour
 
     private void Update()
     {
+        if (!isActiveAndEnabled || shaderFeatures.Count == 0) return;
         foreach (var feature in shaderFeatures.Values) feature.Update();
     }
 
     private void FixedUpdate()
     {
+        if (!isActiveAndEnabled || shaderFeatures.Count == 0) return;
         foreach (var feature in shaderFeatures.Values) feature.FixedUpdate();
     }
 
@@ -77,5 +76,10 @@ public class AdvancedSkin : MonoBehaviour
     public void RefreshEnabledShaderFeatures()
     {
         foreach (ShaderFeature feature in shaderFeatures.Values) { feature.enabled = !UIHandler.CompMode.Value && MeshRenderer.material.HasProperty(feature.propertyName); feature.OnEnable(); }
+    }
+
+    public void ShaderFeaturesOnEnable()
+    {
+        foreach (var feature in shaderFeatures.Values) feature.OnEnable();
     }
 }

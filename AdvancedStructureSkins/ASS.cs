@@ -8,6 +8,7 @@ using AdvancedStructureSkins.API;
 using AdvancedStructureSkins.Shared.SDK;
 using AdvancedStructureSkins.Skins;
 using AdvancedStructureSkins.UI;
+using AdvancedStructureSkins.UnusedCoolStuff;
 using AdvancedStructureSkins.Util;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
@@ -43,10 +44,10 @@ namespace AdvancedStructureSkins;
 public static class ModInfo
 {
     public const string ModName = "Advanced Structure Skins";
-    public const string ModVersion = "2.0.0";
+    public const string ModVersion = "2.0.2";
     public const string ModAuthor = "Cxntrxl";
     public const string Description = "Allows custom shaders and skins to be applied to structures, and provides mod developers with a simple API for loading their own shaders.";
-    public const bool ExperimentalBuild = true;
+    public const bool ExperimentalBuild = false;
 }
 
 // ReSharper disable once InconsistentNaming
@@ -56,6 +57,10 @@ public class ASS : MelonMod
     
     public static Random Random = new Random();
     private static bool VerboseLogging => UIHandler.Initialized ? UIHandler.DebugMode.Value : ModInfo.ExperimentalBuild;
+    private static float _logTimer = 0;
+    private static readonly List<string> Logs = new List<string>();
+    private static readonly List<string> Warns = new List<string>();
+    private static readonly List<string> Errors = new List<string>();
 
     private static AssetBundle _cosmeticBundle;
     private static GameObject _cosmeticPrefab;
@@ -102,6 +107,32 @@ public class ASS : MelonMod
     {
         base.OnSceneWasLoaded(buildIndex, sceneName);
         Random = new Random(sceneName.GetHashCode());
+    }
+
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
+        _logTimer += Time.deltaTime;
+        if (_logTimer > 0.2f && Logs.Count + Warns.Count + Errors.Count > 0)
+        {
+            Dictionary<string, int> collapsedLogs = new Dictionary<string, int>();
+            foreach (var log in Logs.Where(log => !collapsedLogs.TryAdd(log, 1)))
+                collapsedLogs[log]++;
+            foreach (string cLog in collapsedLogs.Keys) Log(cLog + " x" + collapsedLogs[cLog]);
+            Logs.Clear();
+            
+            Dictionary<string, int> collapsedWarns = new Dictionary<string, int>();
+            foreach (var warn in Warns.Where(warn => !collapsedWarns.TryAdd(warn, 1)))
+                collapsedWarns[warn]++;
+            foreach (string cWarn in collapsedWarns.Keys) Warn(cWarn + " x" + collapsedWarns[cWarn]);
+            Warns.Clear();
+            
+            Dictionary<string, int> collapsedErrors = new Dictionary<string, int>();
+            foreach (var error in Errors.Where(error => !collapsedErrors.TryAdd(error, 1)))
+                collapsedErrors[error]++;
+            foreach (string cError in collapsedErrors.Keys) Log(cError + " x" + collapsedErrors[cError]);
+            Errors.Clear();
+        }
     }
 
     private void LoadCosmeticBundle()
@@ -181,36 +212,51 @@ public class ASS : MelonMod
         InputHandler.GetKeyDown(KeyCode.F5, () => { foreach (var s in UnityEngine.Object.FindObjectsOfType<Structure>()) { SkinHandler.ApplySkinTo(s); } });
     }
 
-    public static void Log(object msg)
+    public static void Log(object msg, bool collapseLogs = false)
     {
-        MelonLogger.Msg(msg);
+        if (!collapseLogs) MelonLogger.Msg(msg);
+        else
+        {
+            _logTimer = 0f;
+            Logs.Add(msg.ToString());
+        }
     }
 
-    public static void Warn(object msg)
+    public static void Warn(object msg, bool collapseLogs = false)
     {
-        MelonLogger.Warning(msg);
+        if (!collapseLogs) MelonLogger.Warning(msg);
+        else
+        {
+            _logTimer = 0f;
+            Warns.Add(msg.ToString());
+        }
     }
 
-    public static void Error(object msg)
+    public static void Error(object msg, bool collapseLogs = false)
     {
-        MelonLogger.Error(msg);
+        if (!collapseLogs) MelonLogger.Error(msg);
+        else
+        {
+            _logTimer = 0f;
+            Errors.Add(msg.ToString());
+        }
     }
 
-    public static void LogVerbose(object msg)
+    public static void LogVerbose(object msg, bool collapseLogs = false)
     {
         if (VerboseLogging)
-            Log("[Verbose] " + msg);
+            Log("[Verbose] " + msg, collapseLogs);
     }
     
-    public static void WarnVerbose(object msg)
+    public static void WarnVerbose(object msg, bool collapseLogs = false)
     {
         if (VerboseLogging)
-            Warn("[Verbose] " + msg);
+            Warn("[Verbose] " + msg, collapseLogs);
     }
     
-    public static void ErrorVerbose(object msg)
+    public static void ErrorVerbose(object msg, bool collapseLogs = false)
     {
         if (VerboseLogging)
-            Error("[Verbose] " + msg);
+            Error("[Verbose] " + msg, collapseLogs);
     }
 }

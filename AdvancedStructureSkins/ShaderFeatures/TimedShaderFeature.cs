@@ -9,7 +9,7 @@ public class TimedShaderFeature : ShaderFeature
     private float _time = 0;
     private bool _counting = true;
 
-    public TimedShaderFeature(AdvancedSkin target, ShaderPropertyType type, string propertyName, float defaultValue = 999f) : base(target, type, propertyName, defaultValue) { }
+    public TimedShaderFeature(AdvancedSkin target, string propertyName, float defaultValue = 999f) : base(target, ShaderPropertyType.Float, propertyName, defaultValue) { }
 
     public override void OnEnable()
     {
