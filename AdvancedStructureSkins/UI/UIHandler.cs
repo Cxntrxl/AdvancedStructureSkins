@@ -46,13 +46,13 @@ public class UIHandler
         RegisterUIModels();
         SyncUIWithAssAPI();
 
-        ASS.LogVerbose("UIFramework Setup Initialized");
+        Core.LogVerbose("UIFramework Setup Initialized");
         Initialized = true;
     }
 
     private static void LoadUIPrefabs()
     {
-        PrefabBundle = AssetBundles.LoadAssetBundleFromStream(ASS.Instance, "AdvancedStructureSkins.Resources.UIFramework");
+        PrefabBundle = AssetBundles.LoadAssetBundleFromStream(Core.Instance, "AdvancedStructureSkins.Resources.UIFramework");
         ShaderUIPrefab = new GameObject("ShaderUI") { hideFlags = HideFlags.DontUnloadUnusedAsset };
         ShaderUIPrefab.AddComponent<RectTransform>().localPosition = new(5, -7, 0);
         ShaderUIPrefab.AddComponent<VerticalLayoutGroup>().spacing = 5f;
@@ -67,13 +67,13 @@ public class UIHandler
         
         SkinSelectorPrefab = PrefabBundle.LoadAsset<GameObject>("skinselector");
         SkinSelectorPrefab.hideFlags = HideFlags.HideAndDontSave;
-        ASS.LogVerbose("ShaderSelectorPrefab Loaded. Is Null?: " + (SkinSelectorPrefab == null));
-        foreach (var c in SkinSelectorPrefab.GetComponentsInChildren<Component>(true)) if (c == null) ASS.ErrorVerbose("Missing component in prefab!!!");
+        Core.LogVerbose("ShaderSelectorPrefab Loaded. Is Null?: " + (SkinSelectorPrefab == null));
+        foreach (var c in SkinSelectorPrefab.GetComponentsInChildren<Component>(true)) if (c == null) Core.ErrorVerbose("Missing component in prefab!!!");
         
         SkinItemPrefab = PrefabBundle.LoadAsset<GameObject>("skinitem");
         SkinItemPrefab.hideFlags = HideFlags.HideAndDontSave;
-        ASS.LogVerbose("SkinItemPrefab Loaded. Is Null?: " + (SkinItemPrefab == null));
-        foreach (var c in SkinItemPrefab.GetComponentsInChildren<Component>(true)) if (c == null) ASS.ErrorVerbose("Missing component in prefab!!!");
+        Core.LogVerbose("SkinItemPrefab Loaded. Is Null?: " + (SkinItemPrefab == null));
+        foreach (var c in SkinItemPrefab.GetComponentsInChildren<Component>(true)) if (c == null) Core.ErrorVerbose("Missing component in prefab!!!");
     }
     
     private static void RegisterUIModels()
@@ -87,7 +87,7 @@ public class UIHandler
         ShaderSettings = _shaders.CreateEntry("shaders", "", "shaders", "", false, false, new CustomViewProvider { EntryViewPrefab = ShaderUIPrefab });
         TextureSettings = _textures.CreateEntry("textures", "", "textures", "", false, false, new CustomViewProvider { EntryViewPrefab = TextureUIPrefab });
         
-        UIFramework.UI.Register(ASS.Instance, _settings, _shaders, _textures).OnModSaved += ModSaved;
+        UIFramework.UI.Register(Core.Instance, _settings, _shaders, _textures).OnModSaved += ModSaved;
     }
 
     private static void ModSaved()

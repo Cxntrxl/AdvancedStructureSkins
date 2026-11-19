@@ -1,7 +1,7 @@
 ﻿using AdvancedStructureSkins.ShaderFeatures;
 using AdvancedStructureSkins.Skins;
 
-namespace AdvancedStructureSkins.Shiftstones.Charge;
+namespace ShiftstoneStructureSkins.Charge;
 
 public class TimeSinceChargingCancelled : TimedShaderFeature
 {

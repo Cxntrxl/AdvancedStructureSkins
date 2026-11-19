@@ -8,10 +8,10 @@ public class ModDebug
 {
     public static void AddInputs()
     {
-        if (!ModInfo.ExperimentalBuild)
+        if (!ModInfo.Experimental)
             return;
         
-        ASS.Log("ExperimentalBuild enabled. Adding debug binds");
+        Core.Log("ExperimentalBuild enabled. Adding debug binds");
         
         InputHandler.GetKeyDown(KeyCode.F1, LogPropertyNames);
         InputHandler.GetKeyDown(KeyCode.F2, ScanForTextureReference);
@@ -25,10 +25,10 @@ public class ModDebug
         Material mat = target.GetComponentInChildren<MeshRenderer>().material;
         for (int i = 0; i < 6; i++)
         {
-            ASS.Log("[" + (MaterialPropertyType)i + "]: \n");
+            Core.Log("[" + (MaterialPropertyType)i + "]: \n");
             foreach (string prop in mat.GetPropertyNames((MaterialPropertyType)i))
             {
-                ASS.Log(prop);
+                Core.Log(prop);
             }
         }
     }
@@ -40,13 +40,13 @@ public class ModDebug
             // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
             structure.meshRenderer.material.SetTexture("Texture2D_2058E65A", Texture2D.normalTexture);
 
-            ASS.Log("Replaced textures for " + structure.gameObject.name);
+            Core.Log("Replaced textures for " + structure.gameObject.name);
         }
     }
 
     private static void ScanForTextureReference()
     {
-        ASS.Log("[Texture Scan]: Starting...");
+        Core.Log("[Texture Scan]: Starting...");
         Texture2D target = null;
         foreach (var t in Resources.FindObjectsOfTypeAll<Texture2D>())
         {
@@ -58,7 +58,7 @@ public class ModDebug
 
         if (!target)
         {
-            ASS.Log("[Texture Scan]: Could not find Largerock_Lighting");
+            Core.Log("[Texture Scan]: Could not find Largerock_Lighting");
         }
 
         foreach (var m in Resources.FindObjectsOfTypeAll<Material>())
@@ -67,9 +67,9 @@ public class ModDebug
             {
                 if (m.GetTexture(s) == target)
                 {
-                    ASS.Log("[Texture Scan]: Found Largerock_Lighting on material \"" + m.name + "\"");
-                    ASS.Log("[Texture Scan]: Material shader is " + m.shader.name);
-                    ASS.Log("[Texture Scan]: Property name is \"" + s + "\"");
+                    Core.Log("[Texture Scan]: Found Largerock_Lighting on material \"" + m.name + "\"");
+                    Core.Log("[Texture Scan]: Material shader is " + m.shader.name);
+                    Core.Log("[Texture Scan]: Property name is \"" + s + "\"");
                     return;
                 }
             }

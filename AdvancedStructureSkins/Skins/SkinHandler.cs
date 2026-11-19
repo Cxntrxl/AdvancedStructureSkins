@@ -46,7 +46,7 @@ public static class SkinHandler
 
     public static void Init()
     {
-        ASS.LogVerbose("SkinHandler Initialized");
+        Core.LogVerbose("SkinHandler Initialized");
     }
 
     public static void ApplySkinTo(Structure structure)
@@ -55,7 +55,7 @@ public static class SkinHandler
         
         if (!Types.Keys.Contains(structure.gameObject.name))
         {
-            ASS.Warn("Found unsupported structure with name '" +  structure.gameObject.name + "'");
+            Core.Warn("Found unsupported structure with name '" +  structure.gameObject.name + "'");
             return;
         }
         
@@ -65,7 +65,7 @@ public static class SkinHandler
         
         if (mr == null)
         {
-            ASS.Error("Could not find MeshRenderer on structure!");
+            Core.Error("Could not find MeshRenderer on structure!");
             return;
         }
 
@@ -77,7 +77,7 @@ public static class SkinHandler
         if (shaders.Length <= 0)
             return;
         
-        AssShader shader = shaders[ASS.Random.Next(0, shaders.Length)];
+        AssShader shader = shaders[Core.Random.Next(0, shaders.Length)];
         
         ApplyShaderTo(advancedSkin, type, shader);
         ApplyOverridesTo(advancedSkin, type, shader);
@@ -107,7 +107,7 @@ public static class SkinHandler
 
                 if (tex == null)
                 {
-                    ASS.Warn($"Texture Property {TEXProperties[(int)texType]} doesn't exist.");
+                    Core.Warn($"Texture Property {TEXProperties[(int)texType]} doesn't exist.");
                     continue;
                 }
 
@@ -123,7 +123,7 @@ public static class SkinHandler
         var skins = AssAPI.GetEnabledTextureSetsForStructure(type);
         if (skins.Length <= 0) return;
         
-        AssTextureSet skin = skins[ASS.Random.Next(skins.Length)];
+        AssTextureSet skin = skins[Core.Random.Next(skins.Length)];
 
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         
@@ -166,7 +166,7 @@ public static class SkinHandler
     {
         if (shader.shaders == null)
         {
-            ASS.WarnVerbose("Could not find material list on AssShader, gave up executing ApplyShaderTo()");
+            Core.WarnVerbose("Could not find material list on AssShader, gave up executing ApplyShaderTo()");
             return;
         }
         MeshRenderer mr = advancedSkin.MeshRenderer;
@@ -174,7 +174,7 @@ public static class SkinHandler
         Material[] materials = GetMaterials(shader, mr);
         if (materials.Length <= 0)
         {
-            ASS.WarnVerbose("AssShader returned no materials. Gave up executing ApplyShaderTo()");
+            Core.WarnVerbose("AssShader returned no materials. Gave up executing ApplyShaderTo()");
             return;
         }
 

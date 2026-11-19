@@ -1,0 +1,9 @@
+<Project>
+    <PropertyGroup>
+        <ModName>AdvancedStructureSkins</ModName>
+        <ModVersion>2.0.5</ModVersion>
+        <ModAuthor>Cxntrxl</ModAuthor>
+        <ModDescription>Completely Unused!</ModDescription>
+        <ExperimentalBuild>false</ExperimentalBuild>
+    </PropertyGroup>
+</Project>

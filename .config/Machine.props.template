@@ -1,0 +1,5 @@
+﻿<Project>
+    <PropertyGroup>
+        <GameDirectory>CHANGE_ME</GameDirectory>
+    </PropertyGroup>
+</Project>

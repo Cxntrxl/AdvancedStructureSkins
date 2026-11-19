@@ -38,7 +38,7 @@ public class AssShader
     {
         foreach (var item in bundle.AllAssetNames())
         {
-            ASS.LogVerbose(item);
+            Core.LogVerbose(item);
         }
         
         this.name = name;
@@ -101,7 +101,7 @@ public class AssShader
                     processed++;
                     break;
                 case 4:
-                    ASS.Error("What? How did you even build a texture in your overrides? Dude, this feature isn't even implemented yet..");
+                    Core.Error("What? How did you even build a texture in your overrides? Dude, this feature isn't even implemented yet..");
                     break;
                 case 5:
                     o.intValue = int.Parse(split[processed]);

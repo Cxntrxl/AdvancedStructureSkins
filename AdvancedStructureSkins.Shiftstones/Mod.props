@@ -1,0 +1,9 @@
+<Project>
+    <PropertyGroup>
+        <ModName>ShiftstoneStructureSkins</ModName>
+        <ModVersion>1.0.0</ModVersion>
+        <ModAuthor>Cxntrxl</ModAuthor>
+        <ModDescription>Completely Unused!</ModDescription>
+        <ExperimentalBuild>true</ExperimentalBuild>
+    </PropertyGroup>
+</Project>

@@ -32,7 +32,7 @@ public static class AssAPI
     
     public static void Init()
     {
-        ASS.LogVerbose("Initializing AssAPI");
+        Core.LogVerbose("Initializing AssAPI");
 
         RegisterModShaderFeatures();
         
@@ -46,7 +46,7 @@ public static class AssAPI
         
         BuildTextureCache();
         
-        ASS.LogVerbose("AssAPI Initialized");
+        Core.LogVerbose("AssAPI Initialized");
     }
 
     #region Skin Loading
@@ -60,7 +60,7 @@ public static class AssAPI
             var fullPath = Path.Combine(_skinDirectory, path);
             if (!File.Exists(fullPath))
             {
-                ASS.Error("Skin loading failed attempting to load a skin that doesn't exist.. how??");
+                Core.Error("Skin loading failed attempting to load a skin that doesn't exist.. how??");
                 continue;
             }
 
@@ -68,7 +68,7 @@ public static class AssAPI
 
             if (bundle == null)
             {
-                ASS.Error($"Failed to load .asb: {fullPath}");
+                Core.Error($"Failed to load .asb: {fullPath}");
                 continue;
             }
 
@@ -80,7 +80,7 @@ public static class AssAPI
                 var shader = LoadShaderFromBundle(bundle);
                 if (shader == null)
                 {
-                    ASS.ErrorVerbose($"[Invalid Bundle] Failed to load .asb at: {fullPath}");
+                    Core.ErrorVerbose($"[Invalid Bundle] Failed to load .asb at: {fullPath}");
                     continue;
                 }
                 Shaders.Add(shader);
@@ -90,7 +90,7 @@ public static class AssAPI
                 TextAsset binary = bundle.LoadAsset<TextAsset>(manifestPath);
                 if (binary == null)
                 {
-                    ASS.ErrorVerbose($"[No Manifest] Failed to load .asb at {fullPath}");
+                    Core.ErrorVerbose($"[No Manifest] Failed to load .asb at {fullPath}");
                     continue;
                 }
 
@@ -104,14 +104,14 @@ public static class AssAPI
                 }
                 catch (Exception ex)
                 {
-                    ASS.Error($"Failed to load {Path.GetFileName(fullPath)}: {ex.Message}");
+                    Core.Error($"Failed to load {Path.GetFileName(fullPath)}: {ex.Message}");
                     loadedBundles--;
                 }
             }
 
             loadedBundles++;
         }
-        ASS.LogVerbose(loadedBundles + " .asb Files Loaded");
+        Core.LogVerbose(loadedBundles + " .asb Files Loaded");
     }
     
     private static string[] GetSkinNames()
@@ -151,12 +151,16 @@ public static class AssAPI
         RegisterShaderFeature<TimeSinceHitByExplosion>();
         RegisterShaderFeature<LastExplosionStrength>();
         RegisterShaderFeature<SmoothVelocity>();
+        RegisterShaderFeature<HMDPosition>();
+        RegisterShaderFeature<HMDForward>();
+        RegisterShaderFeature<HMDRight>();
+        RegisterShaderFeature<HMDUp>();
     }
     
     public static void RegisterShaderFeature<T>() where T : ShaderFeature
     {
         if (!ShaderFeatures.Contains(typeof(T))) ShaderFeatures.Add(typeof(T));
-        else ASS.Warn("Tried registering second " + typeof(T).Name + " ShaderFeature, ignored request.");
+        else Core.Warn("Tried registering second " + typeof(T).Name + " ShaderFeature, ignored request.");
     }
 
     public static Dictionary<Type, ShaderFeature> GetFeaturesFor(AdvancedSkin skin)
@@ -165,12 +169,12 @@ public static class AssAPI
         
         foreach (var t in ShaderFeatures)
         {
-            ASS.LogVerbose("Creating ShaderFeature " + t.Name + " for Structure " + skin.name, true);
+            Core.LogVerbose("Creating ShaderFeature " + t.Name + " for Structure " + skin.name, true);
             
             ConstructorInfo ctor = t.GetConstructor(new[] { typeof(AdvancedSkin) });
             if (ctor == null)
             {
-                ASS.Error("Could not locate \"AdvancedSkin target\" Constructor for " + t.FullName);
+                Core.Error("Could not locate \"AdvancedSkin target\" Constructor for " + t.FullName);
                 continue;
             }
             
@@ -185,7 +189,7 @@ public static class AssAPI
 
             if (ctor != null) return (ShaderFeature)ctor.Invoke(new object[] { skin });
             
-            ASS.Error("Could not locate \"AdvancedSkin target\" Constructor for " + t.FullName);
+            Core.Error("Could not locate \"AdvancedSkin target\" Constructor for " + t.FullName);
             return null;
         });
     }
@@ -371,7 +375,7 @@ public static class AssAPI
             LoadStructureDirectory(structurePath, target);
         }
 
-        ASS.Log($"Loaded {TextureSets.Count} texture sets.");
+        Core.Log($"Loaded {TextureSets.Count} texture sets.");
     }
     
     private static void LoadStructureDirectory(string structurePath, StructureFlags target)

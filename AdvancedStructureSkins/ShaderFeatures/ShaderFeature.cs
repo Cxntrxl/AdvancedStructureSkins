@@ -57,7 +57,7 @@ public class ShaderFeature
             {
                 case ShaderPropertyType.Color:
                     if (value is Color color) SetColor(color);
-                    else ASS.WarnVerbose($"Tried setting colour on {GetType().Name} with a non-color value.");
+                    else Core.WarnVerbose($"Tried setting colour on {GetType().Name} with a non-color value.");
                     break;
             
                 case ShaderPropertyType.Vector:
@@ -65,31 +65,31 @@ public class ShaderFeature
                         case Vector2 vector2: SetVector(vector2); break;
                         case Vector3 vector3: SetVector(vector3); break;
                         case Vector4 vector4: SetVector(vector4); break;
-                        default: ASS.WarnVerbose($"Tried setting vector on {GetType().Name} with a non-vector value."); break; 
+                        default: Core.WarnVerbose($"Tried setting vector on {GetType().Name} with a non-vector value."); break; 
                     }
                     break;
             
                 case ShaderPropertyType.Float:
                 case ShaderPropertyType.Range:
                     if (value is float f) SetFloat(f);
-                    else ASS.WarnVerbose($"Tried setting float on {GetType().Name} with a non-float value.");
+                    else Core.WarnVerbose($"Tried setting float on {GetType().Name} with a non-float value.");
                     break;
             
                 case ShaderPropertyType.Texture:
                     if (value is Texture texture) SetTexture(texture);
-                    else ASS.WarnVerbose($"Tried setting texture on {GetType().Name} with a non-texture value.");
+                    else Core.WarnVerbose($"Tried setting texture on {GetType().Name} with a non-texture value.");
                     break;
             
                 case ShaderPropertyType.Int:
                     if (value is int i) SetInt(i);
-                    else ASS.WarnVerbose($"Tried setting int on {GetType().Name} with a non-int value.");
+                    else Core.WarnVerbose($"Tried setting int on {GetType().Name} with a non-int value.");
                     break;
             
                 default:
-                    ASS.Warn($"Tried setting invalid type \"{typeof(T).Name}\" on {GetType().Name}");
+                    Core.Warn($"Tried setting invalid type \"{typeof(T).Name}\" on {GetType().Name}");
                     break;
             }
-        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+        } catch (Exception ex) { Core.ErrorVerbose(ex); }
     }
 
     private void SetColor(Color value)
@@ -138,7 +138,7 @@ public class ShaderFeature
         }
         catch (Exception ex)
         {
-            ASS.ErrorVerbose(ex);
+            Core.ErrorVerbose(ex);
             return null;
         }
     }

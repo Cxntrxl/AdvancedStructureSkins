@@ -10,6 +10,12 @@
 using System;
 using System.Reflection;
 
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModName", "AdvancedStructureSkins")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModVersion", "2.0.5")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModAuthor", "Cxntrxl")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModDescription", "Completely Unused!")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ExperimentalBuild", "false")]
+[assembly: MelonLoader.MelonInfoAttribute(typeof(AdvancedStructureSkins.Core), "AdvancedStructureSkins", "2.0.5", "Cxntrxl")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("AdvancedStructureSkins")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

@@ -1,0 +1,41 @@
+<Project>
+    <Import Project="$(MSBuildProjectDirectory)\Mod.props"
+            Condition="Exists('$(MSBuildProjectDirectory)\Mod.props')" />
+    <Import Project="$(MSBuildThisFileDirectory).config\Machine.props"
+            Condition="Exists('$(MSBuildThisFileDirectory).config\Machine.props')" />
+
+    <PropertyGroup>
+        <ModsDirectory>$(GameDirectory)\Mods</ModsDirectory>
+    </PropertyGroup>
+
+    <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\Mod.props')">
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>ModName</_Parameter1>
+            <_Parameter2>$(ModName)</_Parameter2>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>ModVersion</_Parameter1>
+            <_Parameter2>$(ModVersion)</_Parameter2>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>ModAuthor</_Parameter1>
+            <_Parameter2>$(ModAuthor)</_Parameter2>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>ModDescription</_Parameter1>
+            <_Parameter2>$(ModDescription)</_Parameter2>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>ExperimentalBuild</_Parameter1>
+            <_Parameter2>$(ExperimentalBuild)</_Parameter2>
+        </AssemblyAttribute>
+
+        <AssemblyAttribute Include="MelonLoader.MelonInfoAttribute">
+            <_Parameter1>typeof($(RootNamespace).Core)</_Parameter1>
+            <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
+            <_Parameter2>$(ModName)</_Parameter2>
+            <_Parameter3>$(ModVersion)</_Parameter3>
+            <_Parameter4>$(ModAuthor)</_Parameter4>
+        </AssemblyAttribute>
+    </ItemGroup>
+</Project>

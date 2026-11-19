@@ -2,6 +2,9 @@
 using AdvancedStructureSkins.ShaderFeatures;
 using HarmonyLib;
 using Il2CppRUMBLE.MoveSystem;
+using Il2CppInterop.Common;
+using Il2CppInterop.Runtime.Runtime;
+using Il2CppInterop.Runtime.Runtime.VersionSpecific.MethodInfo;
 
 namespace AdvancedStructureSkins.Skins;
 
@@ -17,6 +20,8 @@ public static class BulkPatcher
         Type baseType = typeof(Modifier);
 
         Assembly asm = baseType.Assembly;
+        
+        Dictionary<IntPtr, MethodInfo> seenAddresses = new();
 
         var derivedTypes = asm.GetTypes()
             .Where(t =>
@@ -38,6 +43,24 @@ public static class BulkPatcher
                 
                 if (method.DeclaringType != type)
                     continue;
+                
+                IntPtr address = GetNativeMethodPointer(method);
+
+                if (seenAddresses.TryGetValue(address, out MethodInfo existing))
+                {
+                    Core.WarnVerbose(
+                        $"\nNative Address Collision in BulkPatcher\n" +
+                        "You probably don't need to worry about this - Cxntrxl\n" +
+                        $"Address: 0x{address.ToInt64():X}\n" +
+                        $"Existing: {existing.DeclaringType.FullName}.{existing.Name}\n" +
+                        $"Current: {method.DeclaringType.FullName}.{method.Name}"
+                    );
+                    continue;
+                }
+                else
+                {
+                    seenAddresses.Add(address, method);
+                }
 
                 harmony.Patch(
                     original: method,
@@ -47,11 +70,11 @@ public static class BulkPatcher
                                 BindingFlags.Static |
                                 BindingFlags.Public)));
 
-                ASS.LogVerbose($"Patched: {type.FullName}.Execute");
+                Core.LogVerbose($"Patched: {type.FullName}.Execute");
             }
             catch (Exception ex)
             {
-                ASS.ErrorVerbose(
+                Core.ErrorVerbose(
                     $"Failed patching {type.FullName}: {ex}");
             }
         }
@@ -77,6 +100,22 @@ public static class BulkPatcher
 
                 pose.ResetTimer();
             }
-        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+        } catch (Exception ex) { Core.ErrorVerbose(ex); }
+    }
+    
+    private static unsafe IntPtr GetNativeMethodPointer(MethodBase method)
+    {
+        FieldInfo field =
+            Il2CppInteropUtils.GetIl2CppMethodInfoPointerFieldForGeneratedMethod(method);
+
+        if (field == null)
+            throw new Exception($"Could not resolve MethodInfo: {method}");
+
+        IntPtr methodInfoPtr = (IntPtr)field.GetValue(null);
+
+        var nativeMethodInfo =
+            UnityVersionHandler.Wrap((Il2CppMethodInfo*)methodInfoPtr);
+
+        return nativeMethodInfo.MethodPointer;
     }
 }

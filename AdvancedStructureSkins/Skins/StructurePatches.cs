@@ -17,7 +17,7 @@ public static class StructureSpawnPatch
             SkinHandler.ApplySkinTo(__instance); 
             //__instance.GetComponent<AdvancedSkin>().GetShaderFeature<IsExplodeApplied>()?.SetProperty(0f);
         }
-        catch (Exception ex) { ASS.Error(ex); }
+        catch (Exception ex) { Core.Error(ex); }
     }
 }
 
@@ -31,7 +31,7 @@ public static class StructureStartPatch
             AdvancedSkin skin = __instance.gameObject.AddComponent<AdvancedSkin>();
             skin.structure = __instance;
         }
-        catch (Exception ex) { ASS.Error(ex); }
+        catch (Exception ex) { Core.Error(ex); }
     }
 }
 
@@ -44,7 +44,7 @@ public static class StructurePhysicsStateChangedPatch
         {
             if (DidChangeGroundState(previousState, newState))
                 __instance.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceGroundStateChanged>()?.ResetTimer();
-        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+        } catch (Exception ex) { Core.ErrorVerbose(ex); }
     }
 
     private static bool DidChangeGroundState(Structure.PhysicsState currentState, Structure.PhysicsState newState)
@@ -66,7 +66,7 @@ public static class StructureShakePatch
         try
         {
             __instance.gameObject.GetComponent<AdvancedSkin>().GetShaderFeature<TimeSinceHitstop>()?.ResetTimer();
-        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+        } catch (Exception ex) { Core.ErrorVerbose(ex); }
     }
 }
 
@@ -84,7 +84,7 @@ public static class ExplodeModifierExecutePatch
             
             skin?.GetShaderFeature<IsExplodeApplied>()?.SetProperty(1f);
             skin?.GetShaderFeature<TimeSinceExplodeApplied>()?.ResetTimer();
-        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+        } catch (Exception ex) { Core.ErrorVerbose(ex); }
     }
 }
 
@@ -126,6 +126,6 @@ public static class OnExplodePatch
                 skin?.GetShaderFeature<LastExplosionStrength>()?.SetProperty(force.magnitude);
             }
             
-        } catch (Exception ex) { ASS.ErrorVerbose(ex); }
+        } catch (Exception ex) { Core.ErrorVerbose(ex); }
     }
 }

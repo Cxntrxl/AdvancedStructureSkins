@@ -10,6 +10,12 @@
 using System;
 using System.Reflection;
 
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModName", "ShiftstoneStructureSkins")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModVersion", "1.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModAuthor", "Cxntrxl")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ModDescription", "Completely Unused!")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("ExperimentalBuild", "true")]
+[assembly: MelonLoader.MelonInfoAttribute(typeof(ShiftstoneStructureSkins.Core), "ShiftstoneStructureSkins", "1.0.0", "Cxntrxl")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("ShiftstoneStructureSkins")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

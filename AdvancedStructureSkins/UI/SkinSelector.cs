@@ -15,7 +15,7 @@ public class SkinSelector : DataEntryAdapter
         base.DisplayData(boxedValue);
         if (boxedValue is not string)
         {
-            ASS.Error("DisplayData is not string");
+            Core.Error("DisplayData is not string");
             return;
         }
 

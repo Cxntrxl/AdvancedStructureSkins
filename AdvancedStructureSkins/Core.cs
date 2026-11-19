@@ -22,18 +22,11 @@ using RumbleModdingAPI;
 using RumbleModdingAPI.RMAPI;
 using UIFramework;
 using UnityEngine.Rendering;
+using Core = AdvancedStructureSkins.Core;
 using ModInfo = AdvancedStructureSkins.ModInfo;
 using Object = UnityEngine.Object;
 using Random = System.Random;
 
-[assembly: 
-    MelonInfo(
-        typeof(ASS), 
-        ModInfo.ModName, 
-        ModInfo.ModVersion,
-        ModInfo.ModAuthor
-    )
-]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonColor(255, 210, 180, 145)]
 [assembly: MelonAuthorColor(255, 5, 210, 240)]
@@ -41,22 +34,13 @@ using Random = System.Random;
 
 namespace AdvancedStructureSkins;
 
-public static class ModInfo
-{
-    public const string ModName = "Advanced Structure Skins";
-    public const string ModVersion = "2.0.2";
-    public const string ModAuthor = "Cxntrxl";
-    public const string Description = "Allows custom shaders and skins to be applied to structures, and provides mod developers with a simple API for loading their own shaders.";
-    public const bool ExperimentalBuild = false;
-}
-
 // ReSharper disable once InconsistentNaming
-public class ASS : MelonMod
+public class Core : MelonMod
 {
-    public static ASS Instance;
+    public static Core Instance;
     
     public static Random Random = new Random();
-    private static bool VerboseLogging => UIHandler.Initialized ? UIHandler.DebugMode.Value : ModInfo.ExperimentalBuild;
+    private static bool VerboseLogging => UIHandler.Initialized ? UIHandler.DebugMode.Value : ModInfo.Experimental;
     private static float _logTimer = 0;
     private static readonly List<string> Logs = new List<string>();
     private static readonly List<string> Warns = new List<string>();

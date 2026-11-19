@@ -6,16 +6,16 @@
 
     <ItemGroup>
       <Reference Include="Il2CppInterop.Runtime">
-        <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
+        <HintPath>$(GameDirectory)\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
       </Reference>
       <Reference Include="Il2Cppmscorlib">
-        <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
+        <HintPath>$(GameDirectory)\MelonLoader\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.AssetBundleModule">
-        <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\Il2CppAssemblies\UnityEngine.AssetBundleModule.dll</HintPath>
+        <HintPath>$(GameDirectory)\MelonLoader\Il2CppAssemblies\UnityEngine.AssetBundleModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.CoreModule">
-        <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
+        <HintPath>$(GameDirectory)\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
     </ItemGroup>
 
@@ -26,12 +26,11 @@
         />
         <Copy
                 SourceFiles="$(TargetPath)"
-                DestinationFolder="E:\SteamLibrary\steamapps\common\RUMBLE\UserLibs"
+                DestinationFolder="$(GameDirectory))\UserLibs"
         />
         <Copy
                 SourceFiles="$(TargetPath)"
-                DestinationFolder="E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\_ThunderstoreBuilds\AdvancedStructureSkins\UserLibs"
+                DestinationFolder="$(MSBuildProjectDirectory)\..\!ThunderstoreBuilds\AdvancedStructureSkins\UserLibs"
         />
     </Target>
-    
 </Project>

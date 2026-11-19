@@ -30,7 +30,7 @@ public class AdvancedSkin : MonoBehaviour
         debugger?.Clear();
         debugger?.BindDefaults(this);
 
-        ASS.LogVerbose("AdvancedSkin OnEnable() on " + name, true);
+        Core.LogVerbose("AdvancedSkin OnEnable() on " + name, true);
         Actions.onPlayerHealthChanged += PlayerHit;
     }
 
@@ -69,7 +69,7 @@ public class AdvancedSkin : MonoBehaviour
     {
         if (shaderFeatures.TryGetValue(typeof(T), out var feature)) return (T)feature;
 
-        ASS.ErrorVerbose($"Could not find requested shader feature '{typeof(T).Name}'");
+        Core.ErrorVerbose($"Could not find requested shader feature '{typeof(T).Name}'");
         return null;
     }
 

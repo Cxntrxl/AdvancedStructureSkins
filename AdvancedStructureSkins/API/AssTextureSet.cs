@@ -148,7 +148,7 @@ public class AssTextureSet
             return result;
         }
         
-        ASS.Error("Invalid UserData/Skins/ folder structure detected. Please contact @cxntrxl on Discord if you need help.");
+        Core.Error("Invalid UserData/Skins/ folder structure detected. Please contact @cxntrxl on Discord if you need help.");
         
         return result;
     }
@@ -189,7 +189,7 @@ public class AssTextureSet
         {
             if (!File.Exists(path))
             {
-                ASS.LogVerbose("Could not find texture file at " + path);
+                Core.LogVerbose("Could not find texture file at " + path);
                 return null;
             }
             
@@ -235,7 +235,7 @@ public class AssTextureSet
         }
         catch (Exception ex)
         {
-            ASS.Error(
+            Core.Error(
                 $"Failed loading texture at {path}\n{ex}"
             );
 

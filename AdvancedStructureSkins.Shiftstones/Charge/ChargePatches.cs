@@ -3,7 +3,7 @@ using HarmonyLib;
 using Il2CppRUMBLE.Combat.ShiftStones;
 using Il2CppRUMBLE.MoveSystem;
 
-namespace AdvancedStructureSkins.Shiftstones.Charge;
+namespace ShiftstoneStructureSkins.Charge;
 
 [HarmonyPatch(typeof(HoldModifier), nameof(HoldModifier.Execute))]
 public static class HoldModifierExecutePatch

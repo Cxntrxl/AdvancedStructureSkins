@@ -2,7 +2,7 @@
 using AdvancedStructureSkins.Skins;
 using UnityEngine.Rendering;
 
-namespace AdvancedStructureSkins.Shiftstones.Charge;
+namespace ShiftstoneStructureSkins.Charge;
 
 public class TimeSinceChargingStarted : TimedShaderFeature
 {

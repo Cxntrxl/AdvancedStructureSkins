@@ -1,5 +1,16 @@
+# Version 2.0.5
+Fixed potential crash caused by patching duplicate native addresses - Thanks to Supercopia for reporting.
+
+# Version 2.0.4
+Fixed incorrect version number in prior release
+
+Added Shader Features `_HMDPosition`, `_HMDForward`, `_HMDUp` and `_HMDRight`
+
+# Version 2.0.3 
+Fixed incorrect RMAPI class reference causing lighting issues
+
 # Version 2.0.2 
-Fixed more critical bug in 2.0.2 which occasionally broke.. everything?
+Fixed a more critical bug in 2.0.1 which occasionally broke.. everything?
 
 # Version 2.0.1
 Fixed critical bug in 2.0.0 preventing shader features from enabling during multiplayer sessions

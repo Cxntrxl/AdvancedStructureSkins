@@ -261,3 +261,5 @@ E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\AdvancedStructureSkins\obj\Deb
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\AdvancedStructureSkins\obj\Debug\net6.0\AdvancedStructureSkins.pdb
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\AdvancedStructureSkins\obj\Debug\net6.0\ref\AdvancedStructureSkins.dll
 E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\AdvancedStructureSkins\bin\Debug\net6.0\Tomlet.dll
+E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\AdvancedStructureSkins\bin\Debug\net6.0\RumbleModdingAPI.xml
+E:\_Projects\_Mods\_RUMBLE\AdvancedStructureSkins\AdvancedStructureSkins\bin\Debug\net6.0\UnityEngine.VRModule.dll

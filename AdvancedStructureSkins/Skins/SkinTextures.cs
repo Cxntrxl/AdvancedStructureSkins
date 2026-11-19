@@ -113,13 +113,13 @@ public class SkinTextures
     {
         if (_textures[textureType] == null)
         {
-            ASS.Error("Requested SkinTexture type is null.");
+            Core.Error("Requested SkinTexture type is null.");
             return null;
         }
 
         if (_textures[textureType].Length == 0)
         {
-            ASS.Error("Requested SkinTexture type is empty.");
+            Core.Error("Requested SkinTexture type is empty.");
             return null;
         }
         
@@ -127,7 +127,7 @@ public class SkinTextures
 
         if (_textures[textureType][resultIndex] == null)
         {
-            ASS.Error("Requested SkinTexture image is null");
+            Core.Error("Requested SkinTexture image is null");
             return null;
         }
         
